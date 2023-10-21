@@ -9,6 +9,7 @@
         mc:Ignorable="d"
         Title="My Shop" Height="900" Width="1600"
         Background="White"
+        WindowStartupLocation="CenterScreen"
         >
 
     <Window.DataContext>
