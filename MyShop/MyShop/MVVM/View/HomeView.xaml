@@ -26,25 +26,25 @@
         <Border Grid.Row="0" Grid.Column="0" Background="AliceBlue"  BorderBrush="Black" BorderThickness="2" Padding="10" Margin="4 0 4 4" CornerRadius="4">
             <StackPanel>
                 <TextBlock FontSize="18" Text="Total Products"/>
-                <TextBlock FontWeight="Bold" FontSize="30" Text="100"/>
+                <TextBlock FontWeight="Bold" FontSize="30" Text="{Binding TotalProducts}"/>
             </StackPanel>
         </Border>
 
         <Border Grid.Row="0" Grid.Column="1" Background="AliceBlue"  BorderBrush="Black" BorderThickness="2" Padding="10" Margin="4 0 4 4" CornerRadius="4">
             <StackPanel >
                 <TextBlock FontSize="18" Text="New Order by Week"/>
-                <TextBlock FontWeight="Bold" FontSize="30" Text="100"/>
+                <TextBlock FontWeight="Bold" FontSize="30" Text="{Binding TotalOrdersByWeek}"/>
             </StackPanel>
         </Border>
 
         <Border Grid.Row="0" Grid.Column="2" Background="AliceBlue"  BorderBrush="Black" BorderThickness="2" Padding="10" Margin="4 0 4 4" CornerRadius="4">
             <StackPanel >
                 <TextBlock FontSize="18" Text="New Order by Month"/>
-                <TextBlock FontWeight="Bold" FontSize="30" Text="100"/>
+                <TextBlock FontWeight="Bold" FontSize="30" Text="{Binding TotalOrdersByMonth}"/>
             </StackPanel>
         </Border>
-        <Border Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="4" Background="AliceBlue"  BorderBrush="Black" BorderThickness="2" Padding="10" Margin="4 0 4 4" CornerRadius="4">
-            <ListView Name="OosProducts">
+        <Border Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="4" Background="AliceBlue"  BorderBrush="Black" BorderThickness="2" Padding="10" Margin="4" CornerRadius="4">
+            <ListView ScrollViewer.HorizontalScrollBarVisibility="Disabled" Name="OosProducts">
                 <ListView.View>
                     <GridView>
                         <GridViewColumn Header="Code" DisplayMemberBinding="{Binding productCode}" Width="120"/>

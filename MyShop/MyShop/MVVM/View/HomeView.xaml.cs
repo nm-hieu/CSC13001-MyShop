@@ -35,6 +35,28 @@ namespace MyShop.MVVM.View
         }
 
         BindingList<Product> _oosProducts;
+
+        private int totalProducts = 100; // Replace with your actual data
+        private int totalOrdersByWeek = 50;     // Replace with your actual data
+        private int totalOrdersByMonth = 500;     // Replace with your actual data
+        public int TotalProducts
+        {
+            get { return totalProducts; }
+            set { totalProducts = value; }
+        }
+
+        public int TotalOrdersByWeek
+        {
+            get { return totalOrdersByWeek; }
+            set { totalOrdersByWeek = value; }
+        }
+
+        public int TotalOrdersByMonth
+        {
+            get { return totalOrdersByMonth; }
+            set { totalOrdersByMonth = value; }
+        }
+
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
             _oosProducts = new BindingList<Product>()
@@ -76,6 +98,7 @@ namespace MyShop.MVVM.View
                 }
             };
             OosProducts.ItemsSource = _oosProducts;
+            DataContext = this;
         }
     }
 }
