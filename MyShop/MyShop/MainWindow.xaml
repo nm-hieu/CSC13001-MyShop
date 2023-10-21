@@ -4,9 +4,69 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MyShop"
+        xmlns:viewModel="clr-namespace:MyShop.MVVM.ViewModel"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="My Shop" Height="900" Width="1600"
+        Background="White"
+        >
+
+    <Window.DataContext>
+        <viewModel:MainViewModel/>
+    </Window.DataContext>
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200" />
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="75" />
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <TextBlock 
+            Text="{x:Static local:GlobalStrings.AppName}"
+            VerticalAlignment="Center"
+            Foreground="Black"
+            FontSize="21"
+            Margin="20 0 0 0"
+        />
+        <StackPanel
+            Grid.Row="1">
+            <RadioButton
+                Content="DashBoard"
+                Height="50"
+                FontSize="14"
+                Style="{StaticResource MenuItem}"
+                IsChecked="True"
+                Command="{Binding HomeViewCommand}"
+                />
+            <RadioButton
+                Content= "Products"
+                Height="50"
+                FontSize="14"
+                Style="{StaticResource MenuItem}"
+                Command="{Binding ProductsViewCommand}"      
+                />
+            <RadioButton
+    Content="orders"
+    Height="50"
+    FontSize="14"
+    Style="{StaticResource MenuItem}"
+    />
+            <RadioButton
+    Content="analytics"
+    Height="50"
+    FontSize="14"
+    Style="{StaticResource MenuItem}"
+    />
+        </StackPanel>
+        <ContentControl
+            Grid.Row="1"
+            Grid.Column="1"
+            Margin="10"
+            Content="{Binding CurrentView}">
+        </ContentControl>
 
     </Grid>
 </Window>
