@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MyShop"
         xmlns:viewModel="clr-namespace:MyShop.MVVM.ViewModel"
+        xmlns:fa="http://schemas.fontawesome.io/icons/"
         mc:Ignorable="d"
         Title="My Shop" Height="900" Width="1600"
         Background="White"
@@ -34,37 +35,37 @@
         <StackPanel
             Grid.Row="1">
             <RadioButton
-                Content="DashBoard"
-                Height="50"
-                FontSize="14"
-                Style="{StaticResource MenuItem}"
-                IsChecked="True"
-                Command="{Binding HomeViewCommand}"
-                />
+            Content="DashBoard"
+            Height="50"
+            FontSize="14"
+            Style="{StaticResource MenuItem}"
+            IsChecked="True"
+            Command="{Binding HomeViewCommand}"
+            />
             <RadioButton
-                Content= "Products"
-                Height="50"
-                FontSize="14"
-                Style="{StaticResource MenuItem}"
-                Command="{Binding ProductsViewCommand}"      
-                />
+            Content= "Products"
+            Height="50"
+            FontSize="14"
+            Style="{StaticResource MenuItem}"
+            Command="{Binding ProductsViewCommand}"      
+            />
             <RadioButton
-    Content="orders"
-    Height="50"
-    FontSize="14"
-    Style="{StaticResource MenuItem}"
-    />
+            Content="orders"
+            Height="50"
+            FontSize="14"
+            Style="{StaticResource MenuItem}"
+            />
             <RadioButton
-    Content="analytics"
-    Height="50"
-    FontSize="14"
-    Style="{StaticResource MenuItem}"
-    />
+            Content="analytics"
+            Height="50"
+            FontSize="14"
+            Style="{StaticResource MenuItem}"
+            />
         </StackPanel>
         <ContentControl
             Grid.Row="1"
             Grid.Column="1"
-            Margin="10"
+            Margin="10 0 10 10"
             Content="{Binding CurrentView}">
         </ContentControl>
 

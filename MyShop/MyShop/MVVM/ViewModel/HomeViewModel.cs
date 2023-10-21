@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MyShop.MVVM.ViewModel
 {
-    internal class HomeViewModel: Observable
+    internal class HomeViewModel
     {
         public HomeViewModel() { }
     }

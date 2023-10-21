@@ -7,8 +7,54 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
              Background="White"
+             Loaded="UserControl_Loaded"
              >
     <Grid>
-        <TextBlock Text="homeview ne"/>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Border Grid.Row="0" Grid.Column="0" Background="AliceBlue"  BorderBrush="Black" BorderThickness="2" Padding="10" Margin="4 0 4 4" CornerRadius="4">
+            <StackPanel>
+                <TextBlock FontSize="18" Text="Total Products"/>
+                <TextBlock FontWeight="Bold" FontSize="30" Text="100"/>
+            </StackPanel>
+        </Border>
+
+        <Border Grid.Row="0" Grid.Column="1" Background="AliceBlue"  BorderBrush="Black" BorderThickness="2" Padding="10" Margin="4 0 4 4" CornerRadius="4">
+            <StackPanel >
+                <TextBlock FontSize="18" Text="New Order by Week"/>
+                <TextBlock FontWeight="Bold" FontSize="30" Text="100"/>
+            </StackPanel>
+        </Border>
+
+        <Border Grid.Row="0" Grid.Column="2" Background="AliceBlue"  BorderBrush="Black" BorderThickness="2" Padding="10" Margin="4 0 4 4" CornerRadius="4">
+            <StackPanel >
+                <TextBlock FontSize="18" Text="New Order by Month"/>
+                <TextBlock FontWeight="Bold" FontSize="30" Text="100"/>
+            </StackPanel>
+        </Border>
+        <Border Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="4" Background="AliceBlue"  BorderBrush="Black" BorderThickness="2" Padding="10" Margin="4 0 4 4" CornerRadius="4">
+            <ListView Name="OosProducts">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="Code" DisplayMemberBinding="{Binding productCode}" Width="120"/>
+                        <GridViewColumn Header="Category" DisplayMemberBinding="{Binding productCategory}" Width="120"/>
+                        <GridViewColumn Header="Name" DisplayMemberBinding="{Binding productName}" Width="120"/>
+                        <GridViewColumn Header="Price" DisplayMemberBinding="{Binding price}" Width="80"/>
+                    </GridView>
+
+                </ListView.View>
+            </ListView>
+        </Border>
     </Grid>
 </UserControl>
