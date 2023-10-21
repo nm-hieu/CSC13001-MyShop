@@ -11,6 +11,7 @@
                     <ControlTemplate TargetType="RadioButton">
 
                         <StackPanel
+                            Name="menuItem"
                             Orientation="Horizontal"
                             Background="{TemplateBinding Background}"
                             >

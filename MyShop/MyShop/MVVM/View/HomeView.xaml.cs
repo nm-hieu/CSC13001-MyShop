@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -34,29 +35,14 @@ namespace MyShop.MVVM.View
             public float price { get; set; }
         }
 
+        class NumberCell
+        {
+            public String content { get; set; }
+            public int total { get; set; }
+        }
+
         BindingList<Product> _oosProducts;
-
-        private int totalProducts = 100; // Replace with your actual data
-        private int totalOrdersByWeek = 50;     // Replace with your actual data
-        private int totalOrdersByMonth = 500;     // Replace with your actual data
-        public int TotalProducts
-        {
-            get { return totalProducts; }
-            set { totalProducts = value; }
-        }
-
-        public int TotalOrdersByWeek
-        {
-            get { return totalOrdersByWeek; }
-            set { totalOrdersByWeek = value; }
-        }
-
-        public int TotalOrdersByMonth
-        {
-            get { return totalOrdersByMonth; }
-            set { totalOrdersByMonth = value; }
-        }
-
+        BindingList<NumberCell> _numbercells;
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
             _oosProducts = new BindingList<Product>()
@@ -97,8 +83,51 @@ namespace MyShop.MVVM.View
                     price=37500
                 }
             };
+            _numbercells = new BindingList<NumberCell>()
+            {
+                new NumberCell()
+                {
+                    content= "Products",
+                    total=100
+                },
+                new NumberCell()
+                {
+                    content= "Orders By Week",
+                    total=50
+                },
+                new NumberCell()
+                {
+                    content= "Orders By Month",
+                    total=500
+                },
+            };
             OosProducts.ItemsSource = _oosProducts;
-            DataContext = this;
+            NumberCellList.ItemsSource = _numbercells;
+        }
+
+        private void UserControl_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            int cellsPerRow = 4;
+            
+            if (this.ActualWidth < 1200 && this.ActualWidth >= 900)
+            {
+                cellsPerRow = 3;
+            }
+            else if (this.ActualWidth >= 600 && this.ActualWidth < 900)
+            {
+                cellsPerRow = 2;
+            }
+
+            GridView gridView = new GridView();
+            for (int i = 0; i < cellsPerRow; i++)
+            {
+                gridView.Columns.Add(new GridViewColumn
+                {
+                    Header = "Product " + (i + 1),
+                    Width = 150, // Set the desired width for each cell
+                    DisplayMemberBinding = new Binding("ProductName") // Adjust the binding path as needed
+                });
+            }
         }
     }
 }

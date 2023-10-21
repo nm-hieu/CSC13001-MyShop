@@ -36,9 +36,6 @@ namespace MyShop.MVVM.ViewModel
                 CurrentView = ProductsVM;
             });
 
-
-
-
         }
     }
 }
