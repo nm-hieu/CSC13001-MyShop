@@ -23,31 +23,31 @@
         <Binding Path="IsViewVisible" Mode="TwoWay" Converter="{StaticResource BooleanToVisibility}"/>
     </Window.Visibility>
 
-    <Border Background="#252836">
-        <Border Background="#1F1D2B"
+    <Border Background="{StaticResource BGColor1}">
+        <Border Background="{StaticResource BGColor2}"
                 Width="300"
                 CornerRadius="30"
-                BorderBrush="#FF7A00"
+                BorderBrush="{StaticResource borderColor1}"
                 BorderThickness="2"
                 Padding="20"
                 Margin="0, 30">
             <StackPanel Orientation="Vertical">
                 <TextBlock Text="MyShop"
-                           Foreground="#FF7A00"
+                           Foreground="{StaticResource titleColor}"
                            TextAlignment="Center"
                            FontSize="20"
                            FontWeight="Bold"
                            Margin="0, 0, 0, 20"/>
             
                 <TextBlock Text="Username"
-                           Foreground="#FFFFFF"
+                           Foreground="{StaticResource textColor1}"
                            FontSize="16"
                            FontWeight="Bold"
                            Margin="0, 0, 0, 10"/>
             
                 <TextBox Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}"
-                         Background="#2D303E"
-                         Foreground="#FFFFFF"
+                         Background="{StaticResource BGColor3}"
+                         Foreground="{StaticResource textColor1}"
                          BorderBrush="Transparent"
                          FontSize="13"
                          FontWeight="Medium"
@@ -56,7 +56,7 @@
                          Margin="0, 0, 0, 10"/>
 
                 <TextBlock Text="Mật khẩu"
-                           Foreground="#FFFFFF"
+                           Foreground="{StaticResource textColor1}"
                            FontSize="16"
                            FontWeight="Bold"
                            Margin="0, 0, 0, 10"/>
@@ -64,7 +64,7 @@
                 <customcontrols:BindablePasswordBox Password="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                                     Margin="0, 0, 0, 10"/>
 
-                <TextBlock Foreground="#D75960"
+                <TextBlock Foreground="{StaticResource textColor-error}"
                            FontSize="16"
                            FontWeight="Bold"
                            Margin="0, 0, 0, 10"
@@ -76,38 +76,29 @@
                               BorderBrush="Transparent"/>
 
                     <TextBlock Text="Ghi nhớ lần đăng nhập này"
-                               Foreground="#FFFFFF"/>
+                               Foreground="{StaticResource textColor1}"/>
                 </WrapPanel>
 
                 <Button Command="{Binding SignInCommand}"
                         Content="ĐĂNG NHẬP"
-                        Foreground="#FFFFFF"
-                        Background="#FF7A00"
+                        Style="{StaticResource actionButton}"
                         FontWeight="Bold"
                         FontSize="16"
                         Height="35"
                         BorderBrush="Transparent">
 
-                    <Button.Template>
-                        <ControlTemplate TargetType="Button">
-                            <Border CornerRadius="5"
-                                    Background="{TemplateBinding Background}">
-                                <ContentPresenter VerticalAlignment="Center"
-                                                  HorizontalAlignment="Center"/>
-                            </Border>
-                        </ControlTemplate>
-                    </Button.Template>
+                    
                 </Button>
 
                 <StackPanel Orientation="Horizontal"
                             HorizontalAlignment="Center"
                             Margin="0,15,0,0">
                     <TextBlock Text="Quên mật khẩu?"
-                               Foreground="DarkGray"
+                               Foreground="{StaticResource textColor2}"
                                FontSize="12"
                                FontWeight="Medium"/>
                     <TextBlock Text="Đặt lại"
-                               Foreground="White"
+                               Foreground="{StaticResource textColor1}"
                                FontSize="12"
                                FontWeight="Medium"
                                Cursor="Hand"

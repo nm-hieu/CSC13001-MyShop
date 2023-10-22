@@ -5,6 +5,11 @@
              xmlns:viewModel="clr-namespace:MyShop.MVVM.ViewModel"
              Startup="ApplicationStart">
     <Application.Resources>
-         
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Styles/GlobalStyles.xaml"/>
+                <ResourceDictionary Source="/Styles/ButtonStyle.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>
