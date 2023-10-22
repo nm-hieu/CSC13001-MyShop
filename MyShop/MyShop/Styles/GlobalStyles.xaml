@@ -17,4 +17,10 @@
     
     <!--Button-->
     <SolidColorBrush x:Key="buttonColor1" Color="#FF7A00"/>
+
+    <SolidColorBrush x:Key="SelectedBackground" Color="#ED7D31" />
+    <SolidColorBrush x:Key="SideBarbackground" Color="#4F4A45" />
+    <SolidColorBrush x:Key="Contentbackground" Color="#6C5F5B" />
+    <SolidColorBrush x:Key="TextColor" Color="#F6F1EE" />
+    <SolidColorBrush x:Key="SelectedTextColor" Color="#ED7D31" />
 </ResourceDictionary>

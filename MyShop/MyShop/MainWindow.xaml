@@ -5,14 +5,80 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MyShop"
         xmlns:viewModel="clr-namespace:MyShop.MVVM.ViewModel"
+        xmlns:fa="http://schemas.fontawesome.io/icons/"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800"
-        WindowStartupLocation="CenterScreen">
+        Title="My Shop" Height="900" Width="1600"
+        Background="White"
+        WindowStartupLocation="CenterScreen"
+        Loaded="Window_Loaded"
+        SizeChanged="Window_SizeChanged"
+        >
+
     <Window.DataContext>
         <viewModel:MainViewModel/>
     </Window.DataContext>
-    
     <Grid>
-        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" MaxWidth="200"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="75" />
+            <RowDefinition Height="50"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <TextBlock
+            Name="appHeader"
+            Text="{x:Static local:GlobalStrings.AppName}"
+            VerticalAlignment="Center"
+            Foreground="Black"
+            FontSize="21"
+            Margin="20 0 0 0"
+        />
+        <ToggleButton Content="Toggle Sidebar" HorizontalAlignment="Left" x:Name="toggleButton" Grid.Column="0" Grid.Row="1" Checked="ToggleButton_Checked" Unchecked="ToggleButton_Unchecked"/>
+        <StackPanel
+            Name="sidebar"
+            Grid.Column="0"
+            Grid.Row="2"
+            Width="200"
+            >
+            <RadioButton
+            Content="DashBoard"
+            Height="50"
+            FontSize="14"
+            Style="{StaticResource MenuItem}"
+            IsChecked="True"
+            Command="{Binding HomeViewCommand}"
+            >
+            </RadioButton>
+            <RadioButton
+            Content= "Products"
+            Height="50"
+            FontSize="14"
+            Style="{StaticResource MenuItem}"
+            Command="{Binding ProductsViewCommand}"      
+            />
+            <RadioButton
+            Content="orders"
+            Height="50"
+            FontSize="14"
+            Style="{StaticResource MenuItem}"
+            />
+            <RadioButton
+            Content="analytics"
+            Height="50"
+            FontSize="14"
+            Style="{StaticResource MenuItem}"
+            />
+        </StackPanel>
+        <ContentControl
+            Grid.Row="1"
+            Grid.RowSpan="2"
+            Grid.Column="1"
+            Margin="10 0 10 10"
+            Content="{Binding CurrentView}">
+        </ContentControl>
     </Grid>
 </Window>

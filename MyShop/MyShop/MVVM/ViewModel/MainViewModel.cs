@@ -7,26 +7,38 @@ using System.Threading.Tasks;
 
 namespace MyShop.MVVM.ViewModel
 {
-    internal class MainViewModel : ObservableObject
+    internal class MainViewModel: Observable
     {
-        public SignInViewModel SignInVM { get; set; }
-
         private object _currentView;
-
+        public RelayCommand HomeViewCommand { get; set; }
+        public RelayCommand ProductsViewCommand { get; set; }  
+        public HomeViewModel HomeVM { get; set; }
+        public ProductsViewModel ProductsVM { get; set; }
+        public SignInViewModel SignInVM { get; set; }
         public object CurrentView
         {
-            get { return _currentView; }
-            set
-            {
-                _currentView = value;
-                OnPropertyChanged();
-            }
+            get { return _currentView;}
+            set { _currentView = value;}
         }
 
-        public MainViewModel()
+        public MainViewModel() 
         {
-            SignInVM = new SignInViewModel();
-            CurrentView = SignInVM;
+            HomeVM = new HomeViewModel();
+            ProductsVM = new ProductsViewModel();
+             SignInVM = new SignInViewModel();
+            CurrentView = HomeVM;
+            
+
+            HomeViewCommand = new RelayCommand(o =>
+            {
+                CurrentView = HomeVM;
+            });
+
+            ProductsViewCommand= new RelayCommand(o =>
+            {
+                CurrentView = ProductsVM;
+            });
+
         }
     }
 }
