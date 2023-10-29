@@ -14,7 +14,7 @@ using System.Windows.Input;
 
 namespace MyShop.MVVM.ViewModel
 {
-    class SignInViewModel : ObservableObject
+    class SignInViewModel
     {
         // Fields
         private string _username;
@@ -29,28 +29,24 @@ namespace MyShop.MVVM.ViewModel
             get => _username;
             set { 
                 _username = value; 
-                OnPropertyChanged(nameof(Username));
-            } 
+                } 
         }
         public SecureString Password { 
             get => _password; 
             set { 
                 _password = value;
-                OnPropertyChanged(nameof(Password));
             }
         }
         public string ErrorMessage { 
             get => _errorMessage; 
             set { 
                 _errorMessage = value;
-                OnPropertyChanged(nameof(ErrorMessage));
             }
         }
         public bool IsViewVisible { 
             get => _isViewVisible;
             set { 
                 _isViewVisible = value;
-                OnPropertyChanged(nameof(IsViewVisible));
             }
         }
 

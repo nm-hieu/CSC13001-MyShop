@@ -4,10 +4,37 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:MyShop.MVVM.View"
+             xmlns:core="clr-namespace:MyShop.Converters"
              mc:Ignorable="d" 
              Background="White"
-             d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-        <TextBlock Text="Product ne"/>
-    </Grid>
+             Loaded="UserControl_Loaded"
+             d:DesignHeight="750" d:DesignWidth="1400">
+    <UserControl.Resources>
+        <core:RelativeToAbsoluteConverter x:Key="absoluteConverter"/>
+    </UserControl.Resources>
+    <Canvas>
+        <Button Content="Connect to database" Width="120" Height="30" Margin="120,34,560,386" Click="Button_Click"/>
+        <ProgressBar x:Name="loading" Width="120" Height="30" Canvas.Left="280" Canvas.Top="34" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <ListView ScrollViewer.HorizontalScrollBarVisibility="Disabled" Name="productsView" Width="1140" Height="584" Canvas.Left="100" Canvas.Top="94" HorizontalAlignment="Left" VerticalAlignment="Top">
+            <ListView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel />
+                </ItemsPanelTemplate>
+            </ListView.ItemsPanel>
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <WrapPanel Background="AliceBlue" Orientation="Vertical" HorizontalAlignment="Center">
+                        <Border Width="200" Height="200" HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <!-- Your centered item goes here -->
+                            <Image RenderOptions.BitmapScalingMode="HighQuality" Margin="0, 0, 5, 0" Width="100" Height="100" Source="{Binding Image, Converter={StaticResource absoluteConverter}}"/>
+                        </Border>
+                        <TextBlock MaxWidth="200" HorizontalAlignment="Center" TextTrimming="WordEllipsis" Text="{Binding Name}" Foreground="Blue" FontWeight="Bold" />
+                        <TextBlock HorizontalAlignment="Center" Text="{Binding Price}" Foreground="Red" FontWeight="Bold" />
+                        <TextBlock HorizontalAlignment="Center" Text="{Binding Color}"  FontWeight="Bold" />
+                    </WrapPanel>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+    </Canvas>
 </UserControl>
