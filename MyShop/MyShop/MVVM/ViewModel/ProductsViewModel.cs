@@ -6,6 +6,7 @@ using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Data;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -13,20 +14,49 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls.Primitives;
+using System.Windows.Input;
+using static MyShop.MVVM.ViewModel.ProductsViewModel;
 
 namespace MyShop.MVVM.ViewModel
 {
     class ProductsViewModel
     {
         public BindingList<Product> _products = new BindingList<Product>();
+        public BindingList<PageInfo> pageInfos = new BindingList<PageInfo>();
         public BindingList<Category> _categories { get; set; }
         public int _rowsPerPage = 5;
         public int _totalPages = -1;
         public int _totalItems = -1;
         public int _currentPage = 1;
+
+        public int priceFrom = 0;
+        public int priceTo = 0;
+        public string searchQuery = "";
+        bool desc = false;
+        public class Order: INotifyPropertyChanged
+        {
+            public string value { get; set; }
+
+            public event PropertyChangedEventHandler? PropertyChanged;
+        }
+
+        string orderOption = "ID";
+
+        public BindingList<Order> orderOptions = new BindingList<Order>();
+
         public ProductsViewModel() {
             ConnectToDB();
+            initOrder();
         }
+
+        private void initOrder()
+        {
+            orderOptions.Add(new Order() { value = "ID" });
+            orderOptions.Add(new Order() { value = "Name" });
+            orderOptions.Add(new Order() { value = "Price" });
+        }
+
         public void loadData()
         {
             LoadAllProducts();
@@ -76,13 +106,98 @@ namespace MyShop.MVVM.ViewModel
             return sql;
         }
 
+        private string addPaging ()
+        {
+            string orderValue = "DESC";
+            if (!desc)
+            {
+                orderValue = "ASC";
+            }
+
+            if (orderOption != "Name")
+            {
+            return $"\r\n order by {orderOption} {orderValue} offset @Skip rows fetch next @Take rows only";
+            }
+            else
+            {
+                return $"\r\n order by CAST(Name AS NVARCHAR(max)) {orderValue} offset @Skip rows fetch next @Take rows only";
+            }
+        }
+
+        private string addPrice()
+        {
+            if (priceFrom >= 0 && priceTo >= 0 && priceFrom < priceTo)
+            {
+                return "\r\n WHERE Price >= @PriceFrom AND Price <= @PriceTo ";
+            }
+            return "";
+        }
+
+        private string addNameQuery(bool isAddedWhere) 
+        {
+            if (searchQuery != "")
+            {
+                if (!isAddedWhere)
+                {
+                return "\r\n WHERE Name like @Keyword ";
+                }
+                else
+                {
+                    return " AND Name like @Keyword ";
+                }
+            }
+            return "";
+        }
+
+
         public void LoadAllProducts()
         {
             string tableName = "Products";
-            var sql = selectTable(tableName);
+            string sql = selectTable(tableName);
+            bool isAddedWhere = false;
+            
+            if (addPrice() != "")
+            {
+                isAddedWhere = true;
+                sql += addPrice();
+            }
 
+            if (addNameQuery(isAddedWhere)!="")
+            {
+                sql += addNameQuery(isAddedWhere);
+                if(!isAddedWhere)
+                {
+                    isAddedWhere = true;
+                }
+            }
+
+            sql+= addPaging();
+            
+            // handle pagination
             var command = new SqlCommand(sql, DB.Instance.Connection);
 
+            if (addPrice() != "")
+            {
+                command.Parameters.Add("@PriceFrom", SqlDbType.Int)
+               .Value = priceFrom;
+                command.Parameters.Add("@PriceTo", SqlDbType.Int)
+                    .Value = priceTo;
+            }
+
+            if (addNameQuery(isAddedWhere) != "")
+            {
+                command.Parameters.Add("@Keyword", SqlDbType.Text)
+               .Value = $"%{searchQuery}%";
+
+            }
+
+            command.Parameters.Add("@Skip", SqlDbType.Int)
+                .Value = (_currentPage - 1) * _rowsPerPage;
+            command.Parameters.Add("@Take", SqlDbType.Int)
+                .Value = _rowsPerPage;
+            
+
+            //var command = new SqlCommand(sql, DB.Instance.Connection);
             var reader = command.ExecuteReader();
             _products.Clear();
             int count = -1;
@@ -111,6 +226,22 @@ namespace MyShop.MVVM.ViewModel
             }
             reader.Close();
             // connect to itemsSource here
+
+                _totalItems = count;
+                _totalPages = (_totalItems / _rowsPerPage) +
+                    (((_totalItems % _rowsPerPage) == 0) ? 0 : 1);
+
+                // Tạo thông tin phân trang cho combobox
+                pageInfos.Clear();
+
+                for (int i = 1; i <= _totalPages; i++)
+                {
+                    pageInfos.Add(new PageInfo()
+                    {
+                        Page = i,
+                        Total = _totalPages
+                    });
+                };
 
         }
 
@@ -263,5 +394,50 @@ namespace MyShop.MVVM.ViewModel
             LoadAllProducts();
             return;
         }
+
+        public int goToPrevious(int selectedIndex)
+        {
+            if (selectedIndex > 0)
+            {
+                int rs = selectedIndex - 1;
+                return rs;
+            }
+            return 0;
+        }
+
+        public int goToNext(int selectedIndex)
+        {
+            if (selectedIndex < _totalPages)
+            {
+                int rs = selectedIndex + 1;
+                return rs;
+            }
+            return 0;
+        }
+
+        public void pagingHandle(dynamic selected)
+        {
+            if (selected != null)
+            {
+                if (selected?.Page != _currentPage)
+                {
+                    _currentPage = selected?.Page;
+                    LoadAllProducts();
+                }
+            }
+        }
+
+        public void ItemPerPageHandle(int selected, int _priceFrom, int _priceTo, string search, int orderOps)
+        {
+            desc = !desc;
+            orderOption =  orderOptions[orderOps].value;
+            _rowsPerPage = selected;
+            _currentPage = 1;
+            priceFrom = _priceFrom;
+            priceTo= _priceTo;
+            searchQuery=search;
+            LoadAllProducts();
+        }
+
     }
 }

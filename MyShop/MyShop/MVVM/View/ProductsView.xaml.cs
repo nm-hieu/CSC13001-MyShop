@@ -13,6 +13,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -35,11 +36,34 @@ namespace MyShop.MVVM.View
             InitializeComponent();
         }
 
+        class Row
+        {
+            public int value { get; set;}
+        }
+
+        class Price
+        {
+            public int value { get; set; }
+        }
+
+        class SearchName
+        {
+            public string value { get; set; } 
+        }
+
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
             ProductsVM = new ProductsViewModel();
             ProductsVM.loadData();
             productsView.ItemsSource = ProductsVM._products;
+            pagingComboBox.ItemsSource = ProductsVM.pageInfos;
+            pagingComboBox.SelectedIndex = ProductsVM._currentPage-1;
+            RowPerPage.DataContext = new Row (){ value = ProductsVM._rowsPerPage };
+            PriceFrom.DataContext = new Price() { value = ProductsVM.priceFrom };
+            PriceTo.DataContext = new Price() { value = ProductsVM.priceTo };
+            SearchTb.DataContext = new SearchName() { value = ProductsVM.searchQuery };
+            orderComboBox.ItemsSource = ProductsVM.orderOptions;
+            orderComboBox.SelectedIndex = 0;
         }
 
 
@@ -51,14 +75,39 @@ namespace MyShop.MVVM.View
             if (openFileDialog.ShowDialog() == true)
             {
                 string selectedFilePath = openFileDialog.FileName;
-
                 ProductsVM.importFromExcel(selectedFilePath);
             }
         }
 
-        private void Button_Click_1(object sender, RoutedEventArgs e)
+        private void previousButton_Click(object sender, RoutedEventArgs e)
         {
+            pagingComboBox.SelectedIndex = ProductsVM.goToPrevious(pagingComboBox.SelectedIndex);
+        }
 
+        private void nextButton_Click(object sender, RoutedEventArgs e)
+        {   
+            pagingComboBox.SelectedIndex = ProductsVM.goToNext(pagingComboBox.SelectedIndex);
+        }
+
+        private void pagingComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            dynamic selected = pagingComboBox.SelectedItem;
+            ProductsVM.pagingHandle(selected);
+            pagingComboBox.ItemsSource = ProductsVM.pageInfos;
+            pagingComboBox.SelectedIndex = ProductsVM._currentPage - 1;
+        }
+
+        private void Button_Click_Filter(object sender, RoutedEventArgs e)
+        {
+            if (RowPerPage.Text != "")
+            {
+                int selected = int.Parse(RowPerPage.Text);
+                int priceFrom = int.Parse(PriceFrom.Text);
+                int priceTo = int.Parse(PriceTo.Text);
+                string seach = SearchTb.Text;
+                int order = orderComboBox.SelectedIndex;
+                ProductsVM.ItemPerPageHandle(selected, priceFrom, priceTo, seach, order);
+            }
         }
     }
 }

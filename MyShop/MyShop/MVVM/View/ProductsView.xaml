@@ -13,9 +13,9 @@
         <core:RelativeToAbsoluteConverter x:Key="absoluteConverter"/>
     </UserControl.Resources>
     <Canvas>
-        <Button Content="Import data from Excel" Width="120" Height="30" Margin="120,34,560,386" Click="Button_Click"/>
-        <ProgressBar x:Name="loading" Width="120" Height="30" Canvas.Left="280" Canvas.Top="34" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-        <ListView ScrollViewer.HorizontalScrollBarVisibility="Disabled" Name="productsView" Width="1140" Height="584" Canvas.Left="100" Canvas.Top="94" HorizontalAlignment="Left" VerticalAlignment="Top">
+        <Button Content="Import data from Excel" Width="155" Height="44" Click="Button_Click" Canvas.Left="120" Canvas.Top="34" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+        <ProgressBar x:Name="loading" Width="120" Height="30" Canvas.Left="309" Canvas.Top="41" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <ListView ScrollViewer.HorizontalScrollBarVisibility="Disabled" Name="productsView" Width="956" Height="486" Canvas.Left="284" Canvas.Top="94" HorizontalAlignment="Left" VerticalAlignment="Center">
             <ListView.ItemsPanel>
                 <ItemsPanelTemplate>
                     <WrapPanel />
@@ -35,6 +35,40 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
+
+        <Button x:Name="previousButton" Width="80" Height="34" Content="Previous" Canvas.Left="561" Canvas.Top="612" Click="previousButton_Click"/>
+        <Button x:Name="nextButton" Width="80" Height="34" Content="Next" Canvas.Left="886" Canvas.Top="612" HorizontalAlignment="Left" VerticalAlignment="Top" Click="nextButton_Click"/>
+        <ComboBox Name="pagingComboBox" Width="200" Height="35" Canvas.Left="666" Canvas.Top="613" SelectionChanged="pagingComboBox_SelectionChanged">
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock>
+<Run Text="{Binding Page, Mode=OneTime}"/>/<Run Text="{Binding Total, Mode=OneTime}"/>
+                    </TextBlock>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
+
+        <TextBlock Text="Items per page" FontSize="20" Width="139" Height="40" Canvas.Left="35" Canvas.Top="94" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <TextBox x:Name="RowPerPage" Text="{Binding value}" FontSize="20"   Width="132" Height="32" Canvas.Left="35" Canvas.Top="134" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+
+        <TextBlock Text="Price from" FontSize="20" Width="139" Height="40" Canvas.Left="35" Canvas.Top="184" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+        <TextBox x:Name="PriceFrom" Text="{Binding value}" FontSize="20"   Width="132" Height="32" Canvas.Left="35" Canvas.Top="224" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+
+        <TextBlock FontSize="20" Width="139" Height="40" Canvas.Left="35" Canvas.Top="265" HorizontalAlignment="Center" VerticalAlignment="Top"><Run Text="Price to"/><LineBreak/><Run/></TextBlock>
+        <TextBox x:Name="PriceTo" Text="{Binding value}" FontSize="20"   Width="132" Height="32" Canvas.Left="35" Canvas.Top="305" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+        <Button Content="Filter" Width="154" Height="44" Click="Button_Click_Filter" Canvas.Left="20" Canvas.Top="536" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <TextBlock FontSize="20" Width="139" Height="40" Canvas.Left="35" Canvas.Top="359" HorizontalAlignment="Center" VerticalAlignment="Top"><Run Text="By name"/><LineBreak/><Run/></TextBlock>
+        <TextBox x:Name="SearchTb" Text="{Binding value}" FontSize="20"   Width="132" Height="32" Canvas.Left="35" Canvas.Top="399" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+
+        <ComboBox x:Name="orderComboBox" Width="127" Height="35" Canvas.Left="35" Canvas.Top="477" HorizontalAlignment="Left" VerticalAlignment="Center">
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock><Run Text="{Binding value, Mode=OneTime}"/></TextBlock>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
+        <TextBlock FontSize="20" Width="139" Height="40" Canvas.Left="35" Canvas.Top="436" HorizontalAlignment="Center" VerticalAlignment="Top" Text="Order by"/>
+
 
     </Canvas>
 </UserControl>
