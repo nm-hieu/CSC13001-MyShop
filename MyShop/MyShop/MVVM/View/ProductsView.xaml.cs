@@ -57,6 +57,8 @@ namespace MyShop.MVVM.View
         {
             string tableName = "Products";
             var sql = selectTable(tableName);
+            _categories = new BindingList<Category>();
+
 
             var command = new SqlCommand(sql, DB.Instance.Connection);
 
