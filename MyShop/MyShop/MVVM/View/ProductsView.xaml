@@ -13,7 +13,7 @@
         <core:RelativeToAbsoluteConverter x:Key="absoluteConverter"/>
     </UserControl.Resources>
     <Canvas>
-        <Button Content="Connect to database" Width="120" Height="30" Margin="120,34,560,386" Click="Button_Click"/>
+        <Button Content="Import data from Excel" Width="120" Height="30" Margin="120,34,560,386" Click="Button_Click"/>
         <ProgressBar x:Name="loading" Width="120" Height="30" Canvas.Left="280" Canvas.Top="34" HorizontalAlignment="Left" VerticalAlignment="Top"/>
         <ListView ScrollViewer.HorizontalScrollBarVisibility="Disabled" Name="productsView" Width="1140" Height="584" Canvas.Left="100" Canvas.Top="94" HorizontalAlignment="Left" VerticalAlignment="Top">
             <ListView.ItemsPanel>

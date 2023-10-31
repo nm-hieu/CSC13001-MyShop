@@ -1,4 +1,5 @@
 ﻿using Microsoft.Data.SqlClient;
+using Microsoft.Win32;
 using MyShop.MVVM.Model;
 using MyShop.MVVM.ViewModel;
 using System;
@@ -44,7 +45,15 @@ namespace MyShop.MVVM.View
 
         private async void Button_Click(object sender, RoutedEventArgs e)
         {
-            
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Excel Files|*.xlsx";
+
+            if (openFileDialog.ShowDialog() == true)
+            {
+                string selectedFilePath = openFileDialog.FileName;
+
+                ProductsVM.importFromExcel(selectedFilePath);
+            }
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
