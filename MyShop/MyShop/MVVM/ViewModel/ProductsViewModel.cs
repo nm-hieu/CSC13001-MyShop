@@ -12,6 +12,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls.Primitives;
@@ -24,7 +25,9 @@ namespace MyShop.MVVM.ViewModel
     {
         public BindingList<Product> _products = new BindingList<Product>();
         public BindingList<PageInfo> pageInfos = new BindingList<PageInfo>();
-        public BindingList<Category> _categories { get; set; }
+        public BindingList<Category> _categories = new BindingList<Category>();
+        int categoryOption = -1;
+
         public BindingList<OrderOption> orderOptions = new BindingList<OrderOption>();
         string orderOption = "ID";
 
@@ -40,7 +43,6 @@ namespace MyShop.MVVM.ViewModel
 
         public ProductsViewModel() {
             ConnectToDB();
-            initOrder();
         }
 
         private void initOrder()
@@ -54,6 +56,8 @@ namespace MyShop.MVVM.ViewModel
         {
             LoadAllProducts();
             LoadCategories();
+            initOrder();
+
         }
 
         public async void ConnectToDB ()
@@ -142,6 +146,24 @@ namespace MyShop.MVVM.ViewModel
             return "";
         }
 
+        private string addCategoryOption(bool isAddedWhere)
+        {
+            if (categoryOption != -1)
+            {
+                if (!isAddedWhere)
+                {
+                    return "\r\n WHERE Category = @Category ";
+                }
+                else
+                {
+                    return " AND WHERE Category = @Category ";
+                }
+            }
+            return "";
+        }
+
+        
+
 
         public void LoadAllProducts()
         {
@@ -164,6 +186,17 @@ namespace MyShop.MVVM.ViewModel
                 }
             }
 
+            if (addCategoryOption(isAddedWhere) != "")
+            {
+                sql += addCategoryOption(isAddedWhere);
+                if (!isAddedWhere)
+                {
+                    isAddedWhere = true;
+                }
+            }
+
+    
+
             sql+= addPaging();
             
             // handle pagination
@@ -181,8 +214,15 @@ namespace MyShop.MVVM.ViewModel
             {
                 command.Parameters.Add("@Keyword", SqlDbType.Text)
                .Value = $"%{searchQuery}%";
-
             }
+
+            if (addCategoryOption(isAddedWhere) != "")
+            {
+                command.Parameters.Add("@Category", SqlDbType.Int)
+               .Value = categoryOption;
+            }
+
+            
 
             command.Parameters.Add("@Skip", SqlDbType.Int)
                 .Value = (_currentPage - 1) * _rowsPerPage;
@@ -210,7 +250,7 @@ namespace MyShop.MVVM.ViewModel
                 var product = new Product()
                 {
                     ID = id,
-                    Name = name,
+                    Name = name.Replace("\n", "").Trim(),
                     Price = price,
                     Image = image,
                     Color = color,
@@ -219,6 +259,7 @@ namespace MyShop.MVVM.ViewModel
                     MarkUpPercent= MarkUpPercent,
                     MarkUpPrice= MarkupPrice,
                 };
+                Debug.WriteLine(name);
                 _products.Add(product);
                 _totalItems = (int)reader["Total"];
                 count = (int)reader["Total"];
@@ -246,9 +287,9 @@ namespace MyShop.MVVM.ViewModel
 
         public void LoadCategories()
         {
-            string tableName = "Products";
+            string tableName = "Categories";
             var sql = selectTable(tableName);
-            _categories = new BindingList<Category>();
+            _categories.Clear();
             var command = new SqlCommand(sql, DB.Instance.Connection);
 
             var reader = command.ExecuteReader();
@@ -435,6 +476,13 @@ namespace MyShop.MVVM.ViewModel
             priceFrom = _priceFrom;
             priceTo= _priceTo;
             searchQuery=search;
+            LoadAllProducts();
+        }
+
+        public void CategoryChangeHandle (int selectedIndex)
+        {
+            _currentPage = 1;
+            categoryOption = _categories[selectedIndex].ID;
             LoadAllProducts();
         }
 

@@ -11,11 +11,13 @@
              d:DesignHeight="750" d:DesignWidth="1400">
     <UserControl.Resources>
         <core:RelativeToAbsoluteConverter x:Key="absoluteConverter"/>
+        <core:PriceFormatConverter x:Key="priceFormatConverter"/>
+        <core:MakeUpPercentConverter x:Key="makeUpPercentConverter"/>
     </UserControl.Resources>
     <Canvas>
         <Button Content="Import data from Excel" Width="155" Height="44" Click="Button_Click" Canvas.Left="120" Canvas.Top="34" HorizontalAlignment="Left" VerticalAlignment="Center"/>
         <ProgressBar x:Name="loading" Width="120" Height="30" Canvas.Left="309" Canvas.Top="41" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-        <ListView ScrollViewer.HorizontalScrollBarVisibility="Disabled" Name="productsView" Width="956" Height="486" Canvas.Left="284" Canvas.Top="94" HorizontalAlignment="Left" VerticalAlignment="Center">
+        <ListView Background="#4F4A45" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Name="productsView" Width="956" Height="486" Canvas.Left="284" Canvas.Top="94" HorizontalAlignment="Left" VerticalAlignment="Center">
             <ListView.ItemsPanel>
                 <ItemsPanelTemplate>
                     <WrapPanel />
@@ -23,18 +25,33 @@
             </ListView.ItemsPanel>
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <WrapPanel Background="AliceBlue" Orientation="Vertical" HorizontalAlignment="Center">
-                        <Border Width="200" Height="200" HorizontalAlignment="Center" VerticalAlignment="Center">
-                            <!-- Your centered item goes here -->
-                            <Image RenderOptions.BitmapScalingMode="HighQuality" Margin="0, 0, 5, 0" Width="100" Height="100" Source="{Binding Image, Converter={StaticResource absoluteConverter}}"/>
-                        </Border>
-                        <TextBlock MaxWidth="200" HorizontalAlignment="Center" TextTrimming="WordEllipsis" Text="{Binding Name}" Foreground="Blue" FontWeight="Bold" />
-                        <TextBlock HorizontalAlignment="Center" Text="{Binding MarkUpPercent}" Foreground="Red" FontWeight="Bold" />
-                        <TextBlock HorizontalAlignment="Center" Text="{Binding MarkUpPrice}" Foreground="Red" FontWeight="Bold" />
-                        <TextBlock HorizontalAlignment="Center" Text="{Binding Price}" Foreground="Red" FontWeight="Bold" />
-                        <TextBlock HorizontalAlignment="Center" Text="{Binding AvailableQuantity}" Foreground="Red" FontWeight="Bold" />
-                        <TextBlock HorizontalAlignment="Center" Text="{Binding Color}"  FontWeight="Bold" />
-                    </WrapPanel>
+                    <Border BorderBrush="#F6F1EE" BorderThickness="1" CornerRadius="5">
+                        <WrapPanel Width="200" Orientation="Vertical">
+                            <Image RenderOptions.BitmapScalingMode="HighQuality" Margin="10" Width="200" Height="100" Source="{Binding Image, Converter={StaticResource absoluteConverter}}"/>
+                            <TextBlock Padding="0,0,0,10" HorizontalAlignment="Center" TextTrimming="WordEllipsis" Text="{Binding Name}" Foreground="#F6F1EE" FontWeight="Bold" FontSize="18" />
+                            <TextBlock  Padding="0,0,0,10" Foreground="#F6F1EE" HorizontalAlignment="Center">
+                                <Run TextDecorations="Strikethrough" Text="{Binding MarkUpPrice, Converter={StaticResource priceFormatConverter}}"  FontWeight="Bold"  />
+                                <Run Text="{Binding MarkUpPercent, Converter={StaticResource makeUpPercentConverter}}" FontWeight="Bold" />
+                            </TextBlock>
+                            <TextBlock Padding="0,0,0,10" HorizontalAlignment="Center" Text="{Binding Price, Converter={StaticResource priceFormatConverter}}" FontSize="16" Foreground="#F6F1EE" FontWeight="Bold" />
+                            <TextBlock HorizontalAlignment="Center" FontWeight="Bold" Foreground="#F6F1EE">
+                                <Run Text="{Binding AvailableQuantity}"/> <Run Text="products is available "/>
+                            </TextBlock>
+                            <TextBlock Padding="0,0,0,10"  HorizontalAlignment="Center" FontWeight="Bold" Foreground="#F6F1EE">
+                                <Run Text="Color: "/><Run Text="{Binding Color}"/>
+                            </TextBlock>
+                            <Button Content="Edit" Height="30" Background="#ED7D31" FontSize="16" FontWeight="Bold" Foreground="#F6F1EE">
+                                <Button.Template>
+                                    <ControlTemplate TargetType="Button">
+                                        <Border Background="{TemplateBinding Background}" CornerRadius="0 0 5 5">
+                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                        </Border>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+
+                        </WrapPanel>
+                    </Border>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
@@ -71,6 +88,13 @@
             </ComboBox.ItemTemplate>
         </ComboBox>
         <TextBlock FontSize="20" Width="139" Height="40" Canvas.Left="35" Canvas.Top="436" HorizontalAlignment="Center" VerticalAlignment="Top" Text="Order by"/>
+        <ComboBox SelectionChanged="categorycb_SelectionChanged" x:Name="categorycb" Width="127" Height="35" Canvas.Left="474" Canvas.Top="36" HorizontalAlignment="Left" VerticalAlignment="Top">
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock><Run Text="{Binding Name, Mode=OneTime}"/></TextBlock>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
 
 
     </Canvas>

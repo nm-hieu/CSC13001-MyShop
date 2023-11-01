@@ -3,6 +3,7 @@ using Microsoft.Win32;
 using MyShop.MVVM.Model;
 using MyShop.MVVM.ViewModel;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -64,6 +65,8 @@ namespace MyShop.MVVM.View
             SearchTb.DataContext = new SearchName() { value = ProductsVM.searchQuery };
             orderComboBox.ItemsSource = ProductsVM.orderOptions;
             orderComboBox.SelectedIndex = 0;
+            categorycb.ItemsSource=ProductsVM._categories; 
+            categorycb.SelectedIndex = 0;
         }
 
 
@@ -108,6 +111,12 @@ namespace MyShop.MVVM.View
                 int order = orderComboBox.SelectedIndex;
                 ProductsVM.ItemPerPageHandle(selected, priceFrom, priceTo, seach, order);
             }
+        }
+
+        private void categorycb_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            int selected = categorycb.SelectedIndex;
+            ProductsVM.CategoryChangeHandle(selected);
         }
     }
 }
