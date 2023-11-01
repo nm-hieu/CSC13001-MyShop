@@ -25,6 +25,9 @@ namespace MyShop.MVVM.ViewModel
         public BindingList<Product> _products = new BindingList<Product>();
         public BindingList<PageInfo> pageInfos = new BindingList<PageInfo>();
         public BindingList<Category> _categories { get; set; }
+        public BindingList<OrderOption> orderOptions = new BindingList<OrderOption>();
+        string orderOption = "ID";
+
         public int _rowsPerPage = 5;
         public int _totalPages = -1;
         public int _totalItems = -1;
@@ -34,16 +37,6 @@ namespace MyShop.MVVM.ViewModel
         public int priceTo = 0;
         public string searchQuery = "";
         bool desc = false;
-        public class Order: INotifyPropertyChanged
-        {
-            public string value { get; set; }
-
-            public event PropertyChangedEventHandler? PropertyChanged;
-        }
-
-        string orderOption = "ID";
-
-        public BindingList<Order> orderOptions = new BindingList<Order>();
 
         public ProductsViewModel() {
             ConnectToDB();
@@ -52,9 +45,9 @@ namespace MyShop.MVVM.ViewModel
 
         private void initOrder()
         {
-            orderOptions.Add(new Order() { value = "ID" });
-            orderOptions.Add(new Order() { value = "Name" });
-            orderOptions.Add(new Order() { value = "Price" });
+            orderOptions.Add(new OrderOption() { value = "ID" });
+            orderOptions.Add(new OrderOption() { value = "Name" });
+            orderOptions.Add(new OrderOption() { value = "Price" });
         }
 
         public void loadData()
