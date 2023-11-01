@@ -243,8 +243,19 @@ namespace MyShop.MVVM.ViewModel
                 int category = (int)reader["Category"];
                 string image = (string)reader["Image"];
                 string color = (string)reader["Color"];
-                int AvailableQuantity = (int)reader["AvailableQuantity"];
-                double MarkUpPercent = (double)reader["MarkUpPercent"];
+                int AvailableQuantity = 0; 
+                double MarkUpPercent = 0;
+
+                if(reader["AvailableQuantity"] != DBNull.Value)
+                {
+                    AvailableQuantity= (int)reader["AvailableQuantity"];
+                }
+
+                if (reader["MarkUpPercent"] != DBNull.Value)
+                {
+                    MarkUpPercent = (double)reader["MarkUpPercent"];
+                }
+
                 int MarkupPrice = (int)Math.Round(price * (1 + MarkUpPercent));
 
                 var product = new Product()
@@ -391,19 +402,28 @@ namespace MyShop.MVVM.ViewModel
             return products;
         }
 
-        private int insertProduct(Product product)
+        private int insertProduct(Product product, int ID = -1)
         {
-            string sql = @"INSERT INTO Products (ID, Name, Price, Category, Color, Image)
-                VALUES (@ID, @Name, @Price, @Category, @Color, @Image);";
+            string sql = @"INSERT INTO Products (ID, Name, Price, Category, Color, Image, AvailableQuantity, MarkUpPercent)
+                VALUES (@ID, @Name, @Price, @Category, @Color, @Image, @AvailableQuantity, @MarkUpPercent);";
 
             SqlCommand insertCommand = new SqlCommand(sql, DB.Instance.Connection);
 
-            insertCommand.Parameters.AddWithValue("@ID", product.ID);
+            if (ID == -1)
+            {
+                insertCommand.Parameters.AddWithValue("@ID", product.ID);
+            }
+            else
+            {
+                insertCommand.Parameters.AddWithValue("@ID", ID);
+            }
             insertCommand.Parameters.AddWithValue("@Name", product.Name);
             insertCommand.Parameters.AddWithValue("@Price", product.Price);
             insertCommand.Parameters.AddWithValue("@Category", product.Category);
             insertCommand.Parameters.AddWithValue("@Color", product.Color);
             insertCommand.Parameters.AddWithValue("@Image", product.Image);
+            insertCommand.Parameters.AddWithValue("@AvailableQuantity", product.AvailableQuantity);
+            insertCommand.Parameters.AddWithValue("@MarkUpPercent", product.MarkUpPercent);
 
             int rowsAffected = insertCommand.ExecuteNonQuery();
 
@@ -485,6 +505,24 @@ namespace MyShop.MVVM.ViewModel
             categoryOption = _categories[selectedIndex].ID;
             LoadAllProducts();
         }
+
+        public int AddProduct (Product addProduct)
+        {
+            int ID = getLastID("Products") + 1;
+            int rs = insertProduct(addProduct, ID);
+            _currentPage = 1;
+            if (rs > 0)
+            {
+                MessageBox.Show($"Product is added success");
+            }
+            else
+            {
+                MessageBox.Show($"Product is added fail");
+            }
+            LoadAllProducts();
+            return rs;
+        }
+
 
     }
 }

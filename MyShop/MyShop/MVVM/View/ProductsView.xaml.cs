@@ -118,5 +118,16 @@ namespace MyShop.MVVM.View
             int selected = categorycb.SelectedIndex;
             ProductsVM.CategoryChangeHandle(selected);
         }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            var addScreen = new AddProduct(ProductsVM._categories);
+            
+            if (addScreen.ShowDialog()!.Value == true)
+            {
+                ProductsVM.AddProduct(addScreen.AddedProduct);
+            }
+
+        }
     }
 }

@@ -15,9 +15,9 @@
         <core:MakeUpPercentConverter x:Key="makeUpPercentConverter"/>
     </UserControl.Resources>
     <Canvas>
-        <Button Content="Import data from Excel" Width="155" Height="44" Click="Button_Click" Canvas.Left="120" Canvas.Top="34" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-        <ProgressBar x:Name="loading" Width="120" Height="30" Canvas.Left="309" Canvas.Top="41" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-        <ListView Background="#4F4A45" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Name="productsView" Width="956" Height="486" Canvas.Left="284" Canvas.Top="94" HorizontalAlignment="Left" VerticalAlignment="Center">
+        <Button Content="Import data from Excel" Width="155" Height="44" Click="Button_Click" Canvas.Left="765" Canvas.Top="36" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+        <Button Content="Add product" Width="156" Height="44" Canvas.Left="945" Canvas.Top="36" HorizontalAlignment="Left" VerticalAlignment="Center" Click="Button_Click_1"/>
+        <ListView Background="#4F4A45" MaxWidth="900" MaxHeight="600" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Name="productsView" Canvas.Left="284" Canvas.Top="94" HorizontalAlignment="Left" VerticalAlignment="Center">
             <ListView.ItemsPanel>
                 <ItemsPanelTemplate>
                     <WrapPanel />
@@ -49,16 +49,15 @@
                                     </ControlTemplate>
                                 </Button.Template>
                             </Button>
-
                         </WrapPanel>
                     </Border>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
 
-        <Button x:Name="previousButton" Width="80" Height="34" Content="Previous" Canvas.Left="561" Canvas.Top="612" Click="previousButton_Click"/>
-        <Button x:Name="nextButton" Width="80" Height="34" Content="Next" Canvas.Left="886" Canvas.Top="612" HorizontalAlignment="Left" VerticalAlignment="Top" Click="nextButton_Click"/>
-        <ComboBox Name="pagingComboBox" Width="200" Height="35" Canvas.Left="666" Canvas.Top="613" SelectionChanged="pagingComboBox_SelectionChanged">
+        <Button x:Name="previousButton" Width="80" Height="34" Content="Previous" Canvas.Left="560" Canvas.Top="684" Click="previousButton_Click" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <Button x:Name="nextButton" Width="80" Height="34" Content="Next" Canvas.Left="885" Canvas.Top="684" HorizontalAlignment="Left" VerticalAlignment="Top" Click="nextButton_Click"/>
+        <ComboBox Name="pagingComboBox" Width="200" Height="35" Canvas.Left="665" Canvas.Top="685" SelectionChanged="pagingComboBox_SelectionChanged" HorizontalAlignment="Left" VerticalAlignment="Top">
             <ComboBox.ItemTemplate>
                 <DataTemplate>
                     <TextBlock>
@@ -88,7 +87,7 @@
             </ComboBox.ItemTemplate>
         </ComboBox>
         <TextBlock FontSize="20" Width="139" Height="40" Canvas.Left="35" Canvas.Top="436" HorizontalAlignment="Center" VerticalAlignment="Top" Text="Order by"/>
-        <ComboBox SelectionChanged="categorycb_SelectionChanged" x:Name="categorycb" Width="127" Height="35" Canvas.Left="474" Canvas.Top="36" HorizontalAlignment="Left" VerticalAlignment="Top">
+        <ComboBox SelectionChanged="categorycb_SelectionChanged" x:Name="categorycb" Width="127" Height="35" Canvas.Left="284" Canvas.Top="42" HorizontalAlignment="Left" VerticalAlignment="Center">
             <ComboBox.ItemTemplate>
                 <DataTemplate>
                     <TextBlock><Run Text="{Binding Name, Mode=OneTime}"/></TextBlock>
