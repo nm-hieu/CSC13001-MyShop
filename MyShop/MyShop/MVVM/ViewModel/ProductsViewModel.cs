@@ -210,6 +210,9 @@ namespace MyShop.MVVM.ViewModel
                 int category = (int)reader["Category"];
                 string image = (string)reader["Image"];
                 string color = (string)reader["Color"];
+                int AvailableQuantity = (int)reader["AvailableQuantity"];
+                double MarkUpPercent = (double)reader["MarkUpPercent"];
+                int MarkupPrice = (int)Math.Round(price * (1 + MarkUpPercent));
 
                 var product = new Product()
                 {
@@ -218,7 +221,10 @@ namespace MyShop.MVVM.ViewModel
                     Price = price,
                     Image = image,
                     Color = color,
-                    Category = category
+                    Category = category,
+                    AvailableQuantity = AvailableQuantity,
+                    MarkUpPercent= MarkUpPercent,
+                    MarkUpPrice= MarkupPrice,
                 };
                 _products.Add(product);
                 _totalItems = (int)reader["Total"];

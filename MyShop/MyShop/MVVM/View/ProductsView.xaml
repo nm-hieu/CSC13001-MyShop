@@ -29,7 +29,10 @@
                             <Image RenderOptions.BitmapScalingMode="HighQuality" Margin="0, 0, 5, 0" Width="100" Height="100" Source="{Binding Image, Converter={StaticResource absoluteConverter}}"/>
                         </Border>
                         <TextBlock MaxWidth="200" HorizontalAlignment="Center" TextTrimming="WordEllipsis" Text="{Binding Name}" Foreground="Blue" FontWeight="Bold" />
+                        <TextBlock HorizontalAlignment="Center" Text="{Binding MarkUpPercent}" Foreground="Red" FontWeight="Bold" />
+                        <TextBlock HorizontalAlignment="Center" Text="{Binding MarkUpPrice}" Foreground="Red" FontWeight="Bold" />
                         <TextBlock HorizontalAlignment="Center" Text="{Binding Price}" Foreground="Red" FontWeight="Bold" />
+                        <TextBlock HorizontalAlignment="Center" Text="{Binding AvailableQuantity}" Foreground="Red" FontWeight="Bold" />
                         <TextBlock HorizontalAlignment="Center" Text="{Binding Color}"  FontWeight="Bold" />
                     </WrapPanel>
                 </DataTemplate>

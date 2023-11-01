@@ -17,6 +17,9 @@ namespace MyShop.MVVM.Model
        
         public string CategoryName { get; set; }
         public int Price { get; set; }
+        public int AvailableQuantity { get; set; }
+        public double MarkUpPercent { get; set; }
+        public int MarkUpPrice { get; set; }
         public event PropertyChangedEventHandler? PropertyChanged;
     }
 }
