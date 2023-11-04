@@ -40,7 +40,7 @@
                             <TextBlock Padding="0,0,0,10"  HorizontalAlignment="Center" FontWeight="Bold" Foreground="#F6F1EE">
                                 <Run Text="Color: "/><Run Text="{Binding Color}"/>
                             </TextBlock>
-                            <Button Content="Edit" Height="30" Background="#ED7D31" FontSize="16" FontWeight="Bold" Foreground="#F6F1EE">
+                            <Button Click="Button_Click_2" DataContext="{Binding ID}" Content="Edit" Height="30" Background="#ED7D31" FontSize="16" FontWeight="Bold" Foreground="#F6F1EE">
                                 <Button.Template>
                                     <ControlTemplate TargetType="Button">
                                         <Border Background="{TemplateBinding Background}" CornerRadius="0 0 5 5">

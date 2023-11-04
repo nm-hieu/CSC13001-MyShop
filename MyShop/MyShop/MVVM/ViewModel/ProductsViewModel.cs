@@ -10,6 +10,7 @@ using System.Data;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -523,6 +524,80 @@ namespace MyShop.MVVM.ViewModel
             return rs;
         }
 
+        int _editProduct (Product prd)
+        {
+            string sql = @"UPDATE Products Set Name = @Name, Price = @Price, Category = @Category, Color = @Color, 
+                                                AvailableQuantity= @AvailableQuantity,MarkUpPercent= @MarkUpPercent where ID = @ID";
 
+            SqlCommand command = new SqlCommand(sql, DB.Instance.Connection);
+            command.Parameters.AddWithValue("@ID", prd.ID);
+            command.Parameters.AddWithValue("@Name", prd.Name);
+            command.Parameters.AddWithValue("@Price", prd.Price);
+            command.Parameters.AddWithValue("@Category", prd.Category);
+            command.Parameters.AddWithValue("@Color", prd.Color);
+            command.Parameters.AddWithValue("@AvailableQuantity", prd.AvailableQuantity);
+            command.Parameters.AddWithValue("@MarkUpPercent", prd.MarkUpPercent);
+
+            int rowsAffected = command.ExecuteNonQuery();
+
+            // < 0 is failed
+            return rowsAffected;
+        }
+
+        int _removeProduct (Product prd)
+        {
+            string sql = @"DELETE FROM  Products where ID = @ID";
+            SqlCommand command = new SqlCommand(sql, DB.Instance.Connection);
+            command.Parameters.AddWithValue("@ID", prd.ID);
+            int rowsAffected = command.ExecuteNonQuery();
+            // < 0 is failed
+            return rowsAffected;
+        }
+
+        public int EditProduct (Product editedProduct)
+        {
+            int rs = _editProduct(editedProduct);
+            _currentPage = 1;
+            if (rs > 0)
+            {
+                MessageBox.Show($"Product is edited success");
+            }
+            else
+            {
+                MessageBox.Show($"Product is edited fail");
+            }
+            LoadAllProducts();
+            return rs;
+        }
+
+        public int RemoveProduct (Product removeProduct)
+        {
+            int rs = _removeProduct(removeProduct);
+            _currentPage = 1;
+            if (rs > 0)
+            {
+                MessageBox.Show($"Product is removed success");
+            }
+            else
+            {
+                MessageBox.Show($"Product is removed fail");
+            }
+            LoadAllProducts();
+            return rs;
+        }
+
+        public Product getProductByID (int id)
+        {
+            int index = -1;
+
+            for(int i = 0; i< _products.Count; i++)
+            {
+                if (_products[i].ID == id)
+                {
+                    index = i; break;
+                }
+            }
+            return _products[index];
+        }
     }
 }

@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:MyShop.MVVM.View"
         mc:Ignorable="d"
         Loaded="Window_Loaded"
+        WindowStartupLocation="CenterScreen"
         Title="AddProduct" Height="450" Width="600">
     <Canvas>
         <TextBlock Text="ADD NEW PRODUCT" Canvas.Left="245" Canvas.Top="110" HorizontalAlignment="Center" VerticalAlignment="Center" />

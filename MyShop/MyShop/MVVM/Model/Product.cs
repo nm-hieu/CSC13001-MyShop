@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MyShop.MVVM.Model
 {
-    public class Product : INotifyPropertyChanged
+    public class Product : INotifyPropertyChanged, ICloneable
     {
         public int ID { get; set; }
         public string Name { get; set; }
@@ -21,5 +21,9 @@ namespace MyShop.MVVM.Model
         public double MarkUpPercent { get; set; }
         public int MarkUpPrice { get; set; }
         public event PropertyChangedEventHandler? PropertyChanged;
+        public object Clone()
+        {
+            return this.MemberwiseClone();
+        }
     }
 }

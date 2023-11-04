@@ -129,5 +129,27 @@ namespace MyShop.MVVM.View
             }
 
         }
+
+        private void Button_Click_2(object sender, RoutedEventArgs e)
+        {
+
+            Button button = (Button)sender;
+            int productID = int.Parse(button.DataContext.ToString());
+
+            //productsView.Items[productID];
+
+            var editScreen = new EditProduct(ProductsVM._categories, ProductsVM.getProductByID(productID));
+            if (editScreen.ShowDialog()!.Value == true)
+            {
+                if (editScreen.isSelectRemove != true)
+                {
+                    ProductsVM.EditProduct(editScreen.EditedProduct);
+                }
+                else
+                {
+                    ProductsVM.RemoveProduct(editScreen.EditedProduct);
+                }
+            }
+        }
     }
 }
