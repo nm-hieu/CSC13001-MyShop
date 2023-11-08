@@ -7,7 +7,7 @@
         xmlns:viewModel="clr-namespace:MyShop.MVVM.ViewModel"
         xmlns:fa="http://schemas.fontawesome.io/icons/"
         mc:Ignorable="d"
-        Title="My Shop" Height="900" Width="1600"
+        Title="My Shop" Height="700" Width="1400"
         Background="White"
         WindowStartupLocation="CenterScreen"
         Loaded="Window_Loaded"
