@@ -1,9 +1,9 @@
-﻿using Microsoft.Identity.Client.Platforms.Features.DesktopOs.Kerberos;
+﻿using Microsoft.Data.SqlClient;
+using Microsoft.Identity.Client.Platforms.Features.DesktopOs.Kerberos;
 using MyShop.MVVM.Model;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
 using System.Reflection;

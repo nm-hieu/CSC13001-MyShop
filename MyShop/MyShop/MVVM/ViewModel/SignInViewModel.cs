@@ -21,7 +21,7 @@ using System.Windows.Input;
 
 namespace MyShop.MVVM.ViewModel
 {
-    class SignInViewModel
+    class SignInViewModel: ObservableObject
     {
         // Fields
         private string _username;

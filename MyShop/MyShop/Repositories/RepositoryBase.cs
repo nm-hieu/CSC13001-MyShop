@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Data.SqlClient;
+using Microsoft.Data.SqlClient;
 
 namespace MyShop.Repositories
 {
@@ -12,7 +12,14 @@ namespace MyShop.Repositories
         private readonly string _connectionString;
         public RepositoryBase()
         {
-            _connectionString = "Server=(local); Database=MyShopDB; Integrated Security=true";
+            var builder = new SqlConnectionStringBuilder();
+            builder.DataSource = "HUNGLEGION\\SQLSERVER";
+            builder.InitialCatalog = "Project1";
+            builder.TrustServerCertificate = true;
+            builder.IntegratedSecurity = true;
+            //_connectionString = "Server=(local); Database=MyShopDB; Integrated Security=true";
+            _connectionString = builder.ConnectionString;
+
         }
         protected SqlConnection GetConnection()
         {
