@@ -1,4 +1,5 @@
-﻿using MyShop.MVVM.Model;
+﻿using Microsoft.Identity.Client.Platforms.Features.DesktopOs.Kerberos;
+using MyShop.MVVM.Model;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -61,6 +62,40 @@ namespace MyShop.Repositories
         public void Remove(int id)
         {
             throw new NotImplementedException();
+        }
+
+        public List<UserModel> loadAllUser()
+        {
+            List<UserModel> userList = new List<UserModel>();
+            UserModel user = null;
+            using (var connection = GetConnection())
+            using (var command = new SqlCommand())
+            {
+                connection.Open();
+                command.Connection = connection;
+                command.CommandText = "select * from [User]";
+
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        user = new UserModel()
+                        {
+                            Username = reader[0].ToString(),
+                            Password = string.Empty,
+                            FirstName = reader[2].ToString(),
+                            LastName = reader[3].ToString(),
+                            Role = reader[4].ToString(),
+                            Email = reader[5].ToString(),
+                            Telephone = reader[6].ToString(),
+                            Address = reader[7].ToString(),
+                        };
+                        userList.Add(user);
+                    }
+                    reader.Close();
+                }
+            }
+            return userList;
         }
     }
 }
