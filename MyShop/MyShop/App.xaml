@@ -4,14 +4,14 @@
              xmlns:local="clr-namespace:MyShop.Converters"
              xmlns:viewModel="clr-namespace:MyShop.MVVM.ViewModel"
              xmlns:view="clr-namespace:MyShop.MVVM.View"
-             StartupUri="MainWindow.xaml">
+             StartupUri="/MVVM/View/SignInView.xaml">
 
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Styles/GlobalStyles.xaml" />
                 <ResourceDictionary Source="Styles/MenuButton.xaml"/>
-                <ResourceDictionary Source="/Styles/ButtonStyle.xaml"/>
+                <ResourceDictionary Source="Styles/ButtonStyle.xaml"/>
             </ResourceDictionary.MergedDictionaries>
             
             <DataTemplate DataType="{x:Type viewModel:HomeViewModel}">

@@ -12,11 +12,11 @@ namespace MyShop.Repositories
         private readonly string _connectionString;
         public RepositoryBase()
         {
-            _connectionString = "Server=(local); Database=MVVMSignInDb; Integrated Security=true";
+            _connectionString = "Server=(local); Database=MyShopDB; Integrated Security=true";
         }
-        //protected SqlConnection GetConnection()
-        //{
-        //    return new SqlConnection(_connectionString);
-        //}
+        protected SqlConnection GetConnection()
+        {
+            return new SqlConnection(_connectionString);
+        }
     }
 }
