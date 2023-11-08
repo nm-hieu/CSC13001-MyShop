@@ -14,12 +14,14 @@
                 <ResourceDictionary Source="Styles/ButtonStyle.xaml"/>
             </ResourceDictionary.MergedDictionaries>
             
-     
             <DataTemplate DataType="{x:Type viewModel:HomeViewModel}">
                 <view:HomeView/>
             </DataTemplate>
             <DataTemplate DataType="{x:Type viewModel:ProductsViewModel}">
                 <view:ProductsView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewModel:SignInViewModel}">
+                <view:SignInView/>
             </DataTemplate>
         </ResourceDictionary>
     </Application.Resources>
