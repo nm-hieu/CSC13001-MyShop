@@ -25,7 +25,7 @@ namespace MyShop.MVVM.ViewModel
         {
             HomeVM = new HomeViewModel();
             ProductsVM = new ProductsViewModel();
-             SignInVM = new SignInViewModel();
+            SignInVM = new SignInViewModel();
             CurrentView = HomeVM;
             
 

@@ -4,10 +4,189 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:MyShop.MVVM.View"
+             xmlns:local1="clr-namespace:MyShop.Converters"
              mc:Ignorable="d" 
              Background="White"
-             d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-        <TextBlock Text="Product ne"/>
-    </Grid>
+             d:DesignHeight="900" d:DesignWidth="1400"   
+             Loaded="UserControl_Loaded">
+
+    <UserControl.Resources>
+        <local1:RelativeToAbsoluteConverter x:Key="PathConverter"/>
+        <local1:PriceConverter x:Key="PriceConverter"/>
+        <local1:DateConverter x:Key="DateConverter"/>
+    </UserControl.Resources>
+    
+    <Canvas>
+        <ListView Name="phoneListView"
+                  Height="500" Width="400"
+                  Canvas.Left="20" Canvas.Top="20"
+                  HorizontalAlignment="Center" VerticalAlignment="Top"
+                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                  SelectionChanged="phoneListView_SelectionChanged">
+            <ListView.ItemContainerStyle>
+                <Style TargetType="{x:Type ListViewItem}"/>
+            </ListView.ItemContainerStyle>
+            <ListView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel/>
+                </ItemsPanelTemplate>
+            </ListView.ItemsPanel>
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Vertical" Height="150" Width="100">
+                        <Image RenderOptions.BitmapScalingMode="HighQuality"
+                               Margin="0,0,5,0" Width="40" Height="70"
+                               Source="{Binding Image, Converter={StaticResource PathConverter}}"/>
+                        <TextBlock Text="{Binding Manufacturer}"
+                                   FontStyle="Oblique"
+                                   HorizontalAlignment="Center"/>
+                        <TextBlock Text="{Binding Name}"
+                                   HorizontalAlignment="Center"
+                                   TextWrapping="Wrap"/>
+                        <TextBlock Text="{Binding Price, Converter={StaticResource PriceConverter}}"
+                                   HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+        <Border BorderThickness="1" BorderBrush="Black"
+                Canvas.Left="450" Canvas.Top="20">
+            <StackPanel Name="itemInformation"
+                    HorizontalAlignment="Center">
+                <Image RenderOptions.BitmapScalingMode="HighQuality"
+               Margin="0 0 5 0" Width="200" Height="350"
+               Source="{Binding Image, Converter={StaticResource PathConverter}}"/>
+                <StackPanel Orientation="Horizontal">
+                    <StackPanel Margin="10 0 0 0">
+                        <TextBlock Text="Name:" Height="25"/>
+                        <TextBlock Text="Manufacturer: " Height="25"/>
+                        <TextBlock Text="Price: " Height="25"/>
+                    </StackPanel>
+                    <StackPanel Height="70" Width="200"
+                            Canvas.Left="540" Canvas.Top="370"
+                            Margin="10 0 0 0"
+                            Orientation="Vertical">
+                        <TextBlock Text="{Binding Name}" Height="25"/>
+                        <TextBlock Text="{Binding Manufacturer}" Height="25"/>
+                        <TextBlock Text="{Binding Price, Converter={StaticResource PriceConverter}}" Height="20"/>
+                    </StackPanel>
+                </StackPanel>
+            </StackPanel>
+        </Border>
+
+        <Button Name="btnAddToReceipt" Content="Add item to receipt"
+                FontSize="20"
+                Canvas.Left="450"
+                Canvas.Top="500"
+                Click="btnAddToReceipt_Click"/>
+
+        <Button Name="btnAddReceipt" Content="New Receipt"
+                FontSize="20"
+                Canvas.Left="450"
+                Canvas.Top="550"
+                Click="btnAddReceipt_Click"/>
+
+        <Button Name="btnDeleteReceipt" Content="Delete Receipt"
+                Width="150" Height="50"
+                FontSize="20"
+                Canvas.Left="400"
+                Canvas.Top="650"
+                Click="btnDeleteReceipt_Click"/>
+        
+        <ListView Name="receiptListView"
+                  Canvas.Left="20" Canvas.Top="600"
+                  Margin="10"
+                  SelectionChanged="receiptListView_SelectionChanged">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Receipt ID" DisplayMemberBinding="{Binding ID}"/>
+                    <GridViewColumn Header="Total Price" DisplayMemberBinding="{Binding TotalPrice, Converter={StaticResource PriceConverter}}"/>
+                    <GridViewColumn Header="Date" DisplayMemberBinding="{Binding Date, Converter={StaticResource DateConverter}}"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+
+        <Border Canvas.Right="20" Canvas.Top="20"
+                BorderThickness="1"
+                BorderBrush="Black">
+            <Grid Name="receiptTitle" Width="450" Height="600">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="4*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <TextBlock Text="SALES RECEIPT"
+                           FontSize="50"
+                           TextAlignment="Center"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           FontWeight="DemiBold"/>
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="2*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="Date: "
+                               FontSize="20"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Left"
+                               Margin="10"/>
+                    <TextBlock Grid.Column="1"
+                               Text="{Binding Date, Converter={StaticResource DateConverter}}"
+                               FontSize="20"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Left"
+                               Margin="10"/>
+                    <TextBlock Grid.Column="2"
+                               Text="Receipt No: "
+                               FontSize="20"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Left"
+                               Margin="10"/>
+                    <TextBlock Grid.Column="3"
+                               Text="{Binding ID}"
+                               FontSize="20"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Left"
+                               Margin="10"/>
+                </Grid>
+                <ListView Grid.Row="2"
+                          Name="receiptDetails"
+                          Margin="10">
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <Setter Property="Focusable" Value="False"/>
+                        </Style>
+                    </ListView.ItemContainerStyle>
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="Product ID" DisplayMemberBinding="{Binding Id}"
+                                            Width="100"/>
+                            <GridViewColumn Header="Product Name" DisplayMemberBinding="{Binding Name}"
+                                            Width="200"/>
+                            <GridViewColumn Header="Price" DisplayMemberBinding="{Binding Price, Converter={StaticResource PriceConverter}}"
+                                            Width="130"/>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+
+                <TextBlock Grid.Row="3"
+                           Text="Total Price: "
+                           FontSize="20"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"/>
+                <TextBlock Grid.Row="3"
+                           Text="{Binding TotalPrice, Converter={StaticResource PriceConverter}}"
+                           FontSize="20"
+                           HorizontalAlignment="Right"
+                           VerticalAlignment="Center"
+                           Margin="0 0 20 0"/>
+            </Grid>
+        </Border>
+        
+    </Canvas>
 </UserControl>
