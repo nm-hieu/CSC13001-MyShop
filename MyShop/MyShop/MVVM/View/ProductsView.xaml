@@ -4,10 +4,97 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:MyShop.MVVM.View"
+             xmlns:core="clr-namespace:MyShop.Converters"
              mc:Ignorable="d" 
              Background="White"
-             d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-        <TextBlock Text="Product ne"/>
-    </Grid>
+             Loaded="UserControl_Loaded"
+             d:DesignHeight="750" d:DesignWidth="1400">
+    <UserControl.Resources>
+        <core:RelativeToAbsoluteConverter x:Key="absoluteConverter"/>
+        <core:PriceFormatConverter x:Key="priceFormatConverter"/>
+        <core:MakeUpPercentConverter x:Key="makeUpPercentConverter"/>
+    </UserControl.Resources>
+    <Canvas>
+        <Button Content="Import data from Excel" Width="155" Height="44" Click="Button_Click" Canvas.Left="765" Canvas.Top="36" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+        <Button Content="Add product" Width="156" Height="44" Canvas.Left="945" Canvas.Top="36" HorizontalAlignment="Left" VerticalAlignment="Center" Click="Button_Click_1"/>
+        <ListView Background="#4F4A45" MaxWidth="900" MaxHeight="600" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Name="productsView" Canvas.Left="284" Canvas.Top="94" HorizontalAlignment="Left" VerticalAlignment="Center">
+            <ListView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel />
+                </ItemsPanelTemplate>
+            </ListView.ItemsPanel>
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Border BorderBrush="#F6F1EE" BorderThickness="1" CornerRadius="5">
+                        <WrapPanel Width="200" Orientation="Vertical">
+                            <Image RenderOptions.BitmapScalingMode="HighQuality" Margin="10" Width="200" Height="100" Source="{Binding Image, Converter={StaticResource absoluteConverter}}"/>
+                            <TextBlock Padding="0,0,0,10" HorizontalAlignment="Center" TextTrimming="WordEllipsis" Text="{Binding Name}" Foreground="#F6F1EE" FontWeight="Bold" FontSize="18" />
+                            <TextBlock  Padding="0,0,0,10" Foreground="#F6F1EE" HorizontalAlignment="Center">
+                                <Run TextDecorations="Strikethrough" Text="{Binding MarkUpPrice, Converter={StaticResource priceFormatConverter}}"  FontWeight="Bold"  />
+                                <Run Text="{Binding MarkUpPercent, Converter={StaticResource makeUpPercentConverter}}" FontWeight="Bold" />
+                            </TextBlock>
+                            <TextBlock Padding="0,0,0,10" HorizontalAlignment="Center" Text="{Binding Price, Converter={StaticResource priceFormatConverter}}" FontSize="16" Foreground="#F6F1EE" FontWeight="Bold" />
+                            <TextBlock HorizontalAlignment="Center" FontWeight="Bold" Foreground="#F6F1EE">
+                                <Run Text="{Binding AvailableQuantity}"/> <Run Text="products is available "/>
+                            </TextBlock>
+                            <TextBlock Padding="0,0,0,10"  HorizontalAlignment="Center" FontWeight="Bold" Foreground="#F6F1EE">
+                                <Run Text="Color: "/><Run Text="{Binding Color}"/>
+                            </TextBlock>
+                            <Button Click="Button_Click_2" DataContext="{Binding ID}" Content="Edit" Height="30" Background="#ED7D31" FontSize="16" FontWeight="Bold" Foreground="#F6F1EE">
+                                <Button.Template>
+                                    <ControlTemplate TargetType="Button">
+                                        <Border Background="{TemplateBinding Background}" CornerRadius="0 0 5 5">
+                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                        </Border>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+                        </WrapPanel>
+                    </Border>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+        <Button x:Name="previousButton" Width="80" Height="34" Content="Previous" Canvas.Left="560" Canvas.Top="684" Click="previousButton_Click" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <Button x:Name="nextButton" Width="80" Height="34" Content="Next" Canvas.Left="885" Canvas.Top="684" HorizontalAlignment="Left" VerticalAlignment="Top" Click="nextButton_Click"/>
+        <ComboBox Name="pagingComboBox" Width="200" Height="35" Canvas.Left="665" Canvas.Top="685" SelectionChanged="pagingComboBox_SelectionChanged" HorizontalAlignment="Left" VerticalAlignment="Top">
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock>
+<Run Text="{Binding Page, Mode=OneTime}"/>/<Run Text="{Binding Total, Mode=OneTime}"/>
+                    </TextBlock>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
+
+        <TextBlock Text="Items per page" FontSize="20" Width="139" Height="40" Canvas.Left="35" Canvas.Top="94" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <TextBox x:Name="RowPerPage" Text="{Binding value}" FontSize="20"   Width="132" Height="32" Canvas.Left="35" Canvas.Top="134" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+
+        <TextBlock Text="Price from" FontSize="20" Width="139" Height="40" Canvas.Left="35" Canvas.Top="184" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+        <TextBox x:Name="PriceFrom" Text="{Binding value}" FontSize="20"   Width="132" Height="32" Canvas.Left="35" Canvas.Top="224" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+
+        <TextBlock FontSize="20" Width="139" Height="40" Canvas.Left="35" Canvas.Top="265" HorizontalAlignment="Center" VerticalAlignment="Top"><Run Text="Price to"/><LineBreak/><Run/></TextBlock>
+        <TextBox x:Name="PriceTo" Text="{Binding value}" FontSize="20"   Width="132" Height="32" Canvas.Left="35" Canvas.Top="305" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+        <Button Content="Filter" Width="154" Height="44" Click="Button_Click_Filter" Canvas.Left="20" Canvas.Top="536" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <TextBlock FontSize="20" Width="139" Height="40" Canvas.Left="35" Canvas.Top="359" HorizontalAlignment="Center" VerticalAlignment="Top"><Run Text="By name"/><LineBreak/><Run/></TextBlock>
+        <TextBox x:Name="SearchTb" Text="{Binding value}" FontSize="20"   Width="132" Height="32" Canvas.Left="35" Canvas.Top="399" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+
+        <ComboBox x:Name="orderComboBox" Width="127" Height="35" Canvas.Left="35" Canvas.Top="477" HorizontalAlignment="Left" VerticalAlignment="Center">
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock><Run Text="{Binding value, Mode=OneTime}"/></TextBlock>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
+        <TextBlock FontSize="20" Width="139" Height="40" Canvas.Left="35" Canvas.Top="436" HorizontalAlignment="Center" VerticalAlignment="Top" Text="Order by"/>
+        <ComboBox SelectionChanged="categorycb_SelectionChanged" x:Name="categorycb" Width="127" Height="35" Canvas.Left="284" Canvas.Top="42" HorizontalAlignment="Left" VerticalAlignment="Center">
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock><Run Text="{Binding Name, Mode=OneTime}"/></TextBlock>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
+
+
+    </Canvas>
 </UserControl>

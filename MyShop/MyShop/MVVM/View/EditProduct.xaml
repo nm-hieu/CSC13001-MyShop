@@ -1,0 +1,39 @@
+﻿<Window x:Class="MyShop.MVVM.View.EditProduct"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MyShop.Converters"
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterScreen"
+        Loaded="Window_Loaded"
+        Title="EditProduct" Height="450" Width="600">
+    <Window.Resources>
+        <local:RelativeToAbsoluteConverter x:Key="absoluteConverter" />
+    </Window.Resources>
+    <Canvas>
+        <TextBlock Text="EDIT PRODUCT" Canvas.Left="260" Canvas.Top="47" HorizontalAlignment="Left" VerticalAlignment="Center" />
+        <TextBlock Text="Name" Canvas.Left="123" Canvas.Top="158" HorizontalAlignment="Left" VerticalAlignment="Top" />
+        <TextBlock Text="Price" Canvas.Left="123" Canvas.Top="179" />
+        <TextBlock Text="Color" Canvas.Left="123" Canvas.Top="221" HorizontalAlignment="Left" VerticalAlignment="Top" />
+        <TextBlock Text="Category" Canvas.Left="123" Canvas.Top="200" HorizontalAlignment="Left" VerticalAlignment="Top" />
+        <TextBlock Text="Available quantity" Canvas.Left="123" Canvas.Top="242" HorizontalAlignment="Left" VerticalAlignment="Top" />
+        <TextBlock Text="Makeup Percent (%)" Canvas.Left="123" Canvas.Top="265" HorizontalAlignment="Left" VerticalAlignment="Top" />
+
+        <TextBox Text="{Binding Name}" x:Name="nametb" Width="100" Canvas.Left="240" Canvas.Top="156" HorizontalAlignment="Left" VerticalAlignment="Top" />
+        <TextBox Text="{Binding Price}" x:Name="pricetb" Width="100" Canvas.Left="240" Canvas.Top="177" HorizontalAlignment="Left" VerticalAlignment="Top" />
+        <ComboBox x:Name="categorycb" Width="100" Height="18" Canvas.Left="240" Canvas.Top="198" HorizontalAlignment="Left" VerticalAlignment="Top">
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock FontSize="10"><Run Text="{Binding Name, Mode=OneTime}"/></TextBlock>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
+        <TextBox Text="{Binding Color}" x:Name="colortb" Width="100" Canvas.Left="240" Canvas.Top="219" HorizontalAlignment="Left" VerticalAlignment="Top" />
+        <TextBox Text="{Binding AvailableQuantity}" x:Name="quantitytb" Width="100" Canvas.Left="240" Canvas.Top="240" HorizontalAlignment="Left" VerticalAlignment="Top" />
+        <TextBox Text="{Binding MarkUpPercent}" x:Name="makeupPercent" Width="100" Canvas.Left="240" Canvas.Top="263" HorizontalAlignment="Left" VerticalAlignment="Top" />
+        <Image Source="{Binding Image, Converter={StaticResource absoluteConverter}}" RenderOptions.BitmapScalingMode="HighQuality" Width="112" Height="116" Canvas.Left="363" Canvas.Top="159" />
+        <Button Click="Confirm_Click" Height="18" FontSize="10" Content="Confirm" Canvas.Left="365" Canvas.Top="339" HorizontalAlignment="Left" VerticalAlignment="Top" />
+        <Button Click="Remove_Click" Height="18" FontSize="10" Content="Remove" Canvas.Left="190" Canvas.Top="339" HorizontalAlignment="Left" VerticalAlignment="Top" />
+    </Canvas>
+</Window>
