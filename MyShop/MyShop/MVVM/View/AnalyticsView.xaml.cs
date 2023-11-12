@@ -1,8 +1,11 @@
 ﻿using Microsoft.Data.SqlClient;
 using MyShop.MVVM.Model;
+using MyShop.MVVM.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Data;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,59 +26,16 @@ namespace MyShop.MVVM.View
     /// </summary>'
     public partial class AnalyticsView : UserControl
     {
+        AnalyticsViewModel AnalyticsViewModel;
         public AnalyticsView()
         {
             InitializeComponent();
+            AnalyticsViewModel = new AnalyticsViewModel();
         }
 
-        public BindingList<Product> _trendingWeekyProducts = new BindingList<Product>();
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            ConnectToDB();
+            AnalyticsViewModel.getWeeklyTrendingProducts();
         }
-        public async void ConnectToDB()
-        {
-            var builder = new SqlConnectionStringBuilder();
-            builder.DataSource = "HUNGLEGION\\SQLSERVER";
-            builder.InitialCatalog = "MyshopDB";
-            builder.TrustServerCertificate = true;
-            builder.IntegratedSecurity = true;
-
-
-            string connectionString = builder.ConnectionString;
-
-            var connection = new SqlConnection(connectionString);
-            connection = await Task.Run(() => {
-                var _connection = new SqlConnection(connectionString);
-                try
-                {
-                    _connection.Open();
-                }
-                catch (Exception ex)
-                {
-
-                    _connection = null;
-                }
-                return _connection;
-            });
-
-            if (connection != null)
-            {
-                DB.Instance.ConnectionString = connectionString;
-            }
-            else
-            {
-                MessageBox.Show(
-                    $"Cannot connect to DB"
-                );
-            }
-        }
-
-        private string selectTable(string tableName)
-        {
-            var sql = $"select *, count(*) over() as Total from {tableName} ";
-            return sql;
-        }
-
     }
 }

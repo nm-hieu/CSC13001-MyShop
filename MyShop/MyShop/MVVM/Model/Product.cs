@@ -20,6 +20,7 @@ namespace MyShop.MVVM.Model
         public int AvailableQuantity { get; set; }
         public double MarkUpPercent { get; set; }
         public int MarkUpPrice { get; set; }
+        public int saledQuantity { get; set; }
         public event PropertyChangedEventHandler? PropertyChanged;
         public object Clone()
         {
