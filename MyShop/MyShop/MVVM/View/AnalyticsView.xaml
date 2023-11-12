@@ -1,0 +1,14 @@
+﻿<UserControl x:Class="MyShop.MVVM.View.AnalyticsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:MyShop.MVVM.View"
+             mc:Ignorable="d" 
+             Background="White"
+             Loaded="UserControl_Loaded"
+             d:DesignHeight="750" d:DesignWidth="1400">
+    <Canvas>
+        <TextBlock Text="Analytics" FontSize="30" Canvas.Left="423" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+    </Canvas>
+</UserControl>
