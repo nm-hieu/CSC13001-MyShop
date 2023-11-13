@@ -4,11 +4,72 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:MyShop.MVVM.View"
+             xmlns:core="clr-namespace:MyShop.Converters"
              mc:Ignorable="d" 
              Background="White"
              Loaded="UserControl_Loaded"
              d:DesignHeight="750" d:DesignWidth="1400">
-    <Canvas>
-        <TextBlock Text="Analytics" FontSize="30" Canvas.Left="423" HorizontalAlignment="Center" VerticalAlignment="Top"/>
-    </Canvas>
+    <UserControl.Resources>
+        <core:RelativeToAbsoluteConverter x:Key="absoluteConverter"/>
+        <core:PriceFormatConverter x:Key="priceFormatConverter"/>
+        <core:MakeUpPercentConverter x:Key="makeUpPercentConverter"/>
+    </UserControl.Resources>
+    <WrapPanel>
+        <DockPanel LastChildFill="True" >
+            <TextBlock Text="Top 5 products last 7 days" HorizontalAlignment="Center" FontSize="25" DockPanel.Dock="Top" Margin="0 0 0 10"/>
+            <Grid>
+                <DataGrid Name="weeklyProductsList" AutoGenerateColumns="False" CanUserAddRows="False" VerticalScrollBarVisibility="Auto" VerticalAlignment="Top">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="ID" Binding="{Binding ID}" Width="SizeToHeader" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="300" />
+                        <DataGridTextColumn Header="MarkUp" Binding="{Binding MarkUpPrice, Converter={StaticResource priceFormatConverter}}" Width="*" />
+                        <DataGridTextColumn Header="MarkUp Percent" Binding="{Binding MarkUpPercent, Converter={StaticResource makeUpPercentConverter}}" Width="*" />
+                        <DataGridTextColumn Header="Price" Binding="{Binding Price, Converter={StaticResource priceFormatConverter}}" Width="*" />
+                        <DataGridTextColumn Header="Available Quantity" Binding="{Binding AvailableQuantity}" Width="*" />
+                        <DataGridTextColumn Header="Sold Quantity" Binding="{Binding saledQuantity}" Width="*" />
+                        <DataGridTextColumn Header="Color" Binding="{Binding Color}" Width="*" />
+                    </DataGrid.Columns>
+                </DataGrid>
+                <!-- Other elements or controls can be added above or below the DataGrid -->
+            </Grid>
+        </DockPanel>
+        <DockPanel LastChildFill="True" Margin="0 10 0 10">
+            <TextBlock Text="Top 5 products in this month" HorizontalAlignment="Center" FontSize="25" DockPanel.Dock="Top" Margin="0 0 0 10"/>
+            <Grid>
+                <!-- Other elements or controls can be added above or below the DataGrid -->
+                <DataGrid Name="monthlyProductsList" AutoGenerateColumns="False" CanUserAddRows="False" VerticalScrollBarVisibility="Auto" VerticalAlignment="Top">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="#" Binding="{Binding ID}" Width="SizeToHeader" IsReadOnly="True" />
+                        <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="300"  />
+                        <DataGridTextColumn Header="MarkUp" Binding="{Binding MarkUpPrice, Converter={StaticResource priceFormatConverter}}" Width="*" />
+                        <DataGridTextColumn Header="MarkUp Percent" Binding="{Binding MarkUpPercent, Converter={StaticResource makeUpPercentConverter}}" Width="*" />
+                        <DataGridTextColumn Header="Price" Binding="{Binding Price, Converter={StaticResource priceFormatConverter}}" Width="*" />
+                        <DataGridTextColumn Header="Available Quantity" Binding="{Binding AvailableQuantity}" Width="*" />
+                        <DataGridTextColumn Header="Sold Quantity" Binding="{Binding saledQuantity}" Width="*" />
+                        <DataGridTextColumn Header="Color" Binding="{Binding Color}" Width="*" />
+                    </DataGrid.Columns>
+                </DataGrid>
+                <!-- Other elements or controls can be added above or below the DataGrid -->
+            </Grid>
+        </DockPanel>
+        <DockPanel LastChildFill="True" Margin="0 10 0 0">
+            <TextBlock Text="Top 5 products in this year" Margin="0 0 0 10" HorizontalAlignment="Center" FontSize="25" DockPanel.Dock="Top"/>
+            <Grid>
+                <!-- Other elements or controls can be added above or below the DataGrid -->
+                <DataGrid Name="yearlyProductsList" AutoGenerateColumns="False" CanUserAddRows="False" VerticalScrollBarVisibility="Auto" VerticalAlignment="Top">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="ID" Binding="{Binding ID}" Width="SizeToHeader" IsReadOnly="True" />
+                        <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="300" />
+                        <DataGridTextColumn Header="MarkUp" Binding="{Binding MarkUpPrice, Converter={StaticResource priceFormatConverter}}" Width="*" />
+                        <DataGridTextColumn Header="MarkUp Percent" Binding="{Binding MarkUpPercent, Converter={StaticResource makeUpPercentConverter}}" Width="*" />
+                        <DataGridTextColumn Header="Price" Binding="{Binding Price, Converter={StaticResource priceFormatConverter}}" Width="*" />
+                        <DataGridTextColumn Header="Available Quantity" Binding="{Binding AvailableQuantity}" Width="*" />
+                        <DataGridTextColumn Header="Sold Quantity" Binding="{Binding saledQuantity}" Width="*" />
+                        <DataGridTextColumn Header="Color" Binding="{Binding Color}" Width="*" />
+                    </DataGrid.Columns>
+                </DataGrid>
+                <!-- Other elements or controls can be added above or below the DataGrid -->
+            </Grid>
+        </DockPanel>
+    </WrapPanel>
 </UserControl>

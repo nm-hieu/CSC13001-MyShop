@@ -13,9 +13,18 @@ namespace MyShop.MVVM.ViewModel
 {
     class AnalyticsViewModel
     {
-        private List<int> itemIds = new List<int>();
-        private List<object> _weeklyProducts = new List<object>();
+        private List<int> weeklyItemIds = new List<int>();
+        private List<object> weeklyProducts = new List<object>();
         public BindingList<Product> _trendingWeekyProducts = new BindingList<Product>();
+
+        private List<int> monthlyItemIds = new List<int>();
+        private List<object> monthlyProducts = new List<object>();
+        public BindingList<Product> _trendingMonthProducts = new BindingList<Product>();
+
+
+        private List<int> yearlyItemIds = new List<int>();
+        private List<object> yearlyProducts = new List<object>();
+        public BindingList<Product> _trendingYearProducts = new BindingList<Product>();
 
         public AnalyticsViewModel()
         {
@@ -76,7 +85,7 @@ namespace MyShop.MVVM.ViewModel
             return sql;
         }
 
-        private string sqlTrendingYearlyProduct(int year = 1)
+        private string sqlTrendingYearlyProduct()
         {
             var sql = $@"SELECT TOP 5
                         od.ProductID,
@@ -92,7 +101,7 @@ namespace MyShop.MVVM.ViewModel
             return sql;
         }
 
-        private string sqlTrendingMonthlyProduct (int month = 1)
+        private string sqlTrendingMonthlyProduct ()
         {
             var sql = $@"SELECT TOP 5
                         od.ProductID,
@@ -109,10 +118,9 @@ namespace MyShop.MVVM.ViewModel
             return sql;
         }
 
-        private string sqlTrendingWeeklyProductDetail()
+        private string sqlTrendingProductDetail(List<int> weeklyItemIds)
         {
-            string conditionString = string.Join(" or ", itemIds.Select(id => $"ID = {id}"));
-
+            string conditionString = string.Join(" or ", weeklyItemIds.Select(id => $"ID = {id}"));
             var sql = $"select * from Products where {conditionString} ";
             Debug.WriteLine( sql );
             return sql;
@@ -124,22 +132,22 @@ namespace MyShop.MVVM.ViewModel
             var command = new SqlCommand(sql, DB.Instance.Connection);
 
             var reader = command.ExecuteReader();
-            _weeklyProducts.Clear();
+            weeklyProducts.Clear();
 
             while (reader.Read())
             {
                 int id = (int)reader["productID"];
                 int quantity = (int)reader["total_quantity"];
                 var item = new { id = id, quantity = quantity };
-                _weeklyProducts.Add(item);
-                itemIds.Add(id);
+                weeklyProducts.Add(item);
+                weeklyItemIds.Add(id);
             }
             reader.Close();
         }
 
         private void getTop5WeeklyProductDetail()
         {
-            var sql = sqlTrendingWeeklyProductDetail();
+            var sql = sqlTrendingProductDetail(weeklyItemIds);
             var command = new SqlCommand(sql, DB.Instance.Connection);
 
             var reader = command.ExecuteReader();
@@ -169,7 +177,7 @@ namespace MyShop.MVVM.ViewModel
                 int MarkupPrice = (int)Math.Round(price * (1 + MarkUpPercent));
                 int saledQuantity = 0;
 
-                var matchingWeeklyProduct = _weeklyProducts
+                var matchingWeeklyProduct = weeklyProducts
                     .OfType<dynamic>()
                     .FirstOrDefault(wp => wp.id == id);
 
@@ -197,7 +205,6 @@ namespace MyShop.MVVM.ViewModel
             reader.Close();
 
             var sortedQuantityProducts = _trendingWeekyProducts.OrderByDescending(p => p.saledQuantity).ThenBy(p => p.ID).ToList();
-            // Clear the existing items and add the sorted items back
             _trendingWeekyProducts.Clear();
             foreach (var product in sortedQuantityProducts)
             {
@@ -205,10 +212,185 @@ namespace MyShop.MVVM.ViewModel
             }
         }
 
+        private void getTop5MonthlyProductID()
+        {
+            var sql = sqlTrendingMonthlyProduct();
+            var command = new SqlCommand(sql, DB.Instance.Connection);
+
+            var reader = command.ExecuteReader();
+            monthlyProducts.Clear();
+
+            while (reader.Read())
+            {
+                int id = (int)reader["productID"];
+                int quantity = (int)reader["total_quantity"];
+                var item = new { id = id, quantity = quantity };
+                monthlyProducts.Add(item);
+                monthlyItemIds.Add(id);
+            }
+            reader.Close();
+        }
+        private void getTop5MonthlyProductDetail()
+        {
+            var sql = sqlTrendingProductDetail(monthlyItemIds);
+            var command = new SqlCommand(sql, DB.Instance.Connection);
+
+            var reader = command.ExecuteReader();
+            _trendingMonthProducts.Clear();
+
+            while (reader.Read())
+            {
+                int id = (int)reader["ID"];
+                string name = (string)reader["Name"];
+                int price = (int)reader["Price"];
+                int category = (int)reader["Category"];
+                string image = (string)reader["Image"];
+                string color = (string)reader["Color"];
+                int AvailableQuantity = 0;
+                double MarkUpPercent = 0;
+
+                if (reader["AvailableQuantity"] != DBNull.Value)
+                {
+                    AvailableQuantity = (int)reader["AvailableQuantity"];
+                }
+
+                if (reader["MarkUpPercent"] != DBNull.Value)
+                {
+                    MarkUpPercent = (double)reader["MarkUpPercent"];
+                }
+
+                int MarkupPrice = (int)Math.Round(price * (1 + MarkUpPercent));
+                int saledQuantity = 0;
+
+                var matchingMonthlyProduct = monthlyProducts
+                    .OfType<dynamic>()
+                    .FirstOrDefault(wp => wp.id == id);
+
+                if (matchingMonthlyProduct != null)
+                {
+                    saledQuantity = matchingMonthlyProduct.quantity;
+                }
+
+
+                var product = new Product()
+                {
+                    ID = id,
+                    Name = name.Replace("\n", "").Trim(),
+                    Price = price,
+                    Image = image,
+                    Color = color,
+                    Category = category,
+                    AvailableQuantity = AvailableQuantity,
+                    MarkUpPercent = MarkUpPercent,
+                    MarkUpPrice = MarkupPrice,
+                    saledQuantity = saledQuantity,
+                };
+                _trendingMonthProducts.Add(product);
+            }
+            reader.Close();
+
+            var sortedQuantityProducts = _trendingMonthProducts.OrderByDescending(p => p.saledQuantity).ThenBy(p => p.ID).ToList();
+            _trendingMonthProducts.Clear();
+            foreach (var product in sortedQuantityProducts)
+            {
+                _trendingMonthProducts.Add(product);
+            }
+        }
+
+
+        private void getTop5YearlyProductID()
+        {
+            var sql = sqlTrendingYearlyProduct();
+            var command = new SqlCommand(sql, DB.Instance.Connection);
+
+            var reader = command.ExecuteReader();
+            yearlyProducts.Clear();
+
+            while (reader.Read())
+            {
+                int id = (int)reader["productID"];
+                int quantity = (int)reader["total_quantity"];
+                var item = new { id = id, quantity = quantity };
+                yearlyProducts.Add(item);
+                yearlyItemIds.Add(id);
+            }
+            reader.Close();
+        }
+        private void getTop5YearlyProductDetail()
+        {
+            var sql = sqlTrendingProductDetail(yearlyItemIds);
+            var command = new SqlCommand(sql, DB.Instance.Connection);
+
+            var reader = command.ExecuteReader();
+            _trendingYearProducts.Clear();
+
+            while (reader.Read())
+            {
+                int id = (int)reader["ID"];
+                string name = (string)reader["Name"];
+                int price = (int)reader["Price"];
+                int category = (int)reader["Category"];
+                string image = (string)reader["Image"];
+                string color = (string)reader["Color"];
+                int AvailableQuantity = 0;
+                double MarkUpPercent = 0;
+
+                if (reader["AvailableQuantity"] != DBNull.Value)
+                {
+                    AvailableQuantity = (int)reader["AvailableQuantity"];
+                }
+
+                if (reader["MarkUpPercent"] != DBNull.Value)
+                {
+                    MarkUpPercent = (double)reader["MarkUpPercent"];
+                }
+
+                int MarkupPrice = (int)Math.Round(price * (1 + MarkUpPercent));
+                int saledQuantity = 0;
+
+                var matchingYearlyProduct = yearlyProducts
+                    .OfType<dynamic>()
+                    .FirstOrDefault(wp => wp.id == id);
+
+                if (matchingYearlyProduct != null)
+                {
+                    saledQuantity = matchingYearlyProduct.quantity;
+                }
+
+
+                var product = new Product()
+                {
+                    ID = id,
+                    Name = name.Replace("\n", "").Trim(),
+                    Price = price,
+                    Image = image,
+                    Color = color,
+                    Category = category,
+                    AvailableQuantity = AvailableQuantity,
+                    MarkUpPercent = MarkUpPercent,
+                    MarkUpPrice = MarkupPrice,
+                    saledQuantity = saledQuantity,
+                };
+                _trendingYearProducts.Add(product);
+            }
+            reader.Close();
+
+            var sortedQuantityProducts = _trendingYearProducts.OrderByDescending(p => p.saledQuantity).ThenBy(p => p.ID).ToList();
+            _trendingYearProducts.Clear();
+            foreach (var product in sortedQuantityProducts)
+            {
+                _trendingYearProducts.Add(product);
+            }
+        }
+
         public void getWeeklyTrendingProducts()
         {
             getTop5WeeklyProductID();
             getTop5WeeklyProductDetail();
+            getTop5MonthlyProductID();
+            getTop5MonthlyProductDetail();
+            getTop5YearlyProductID();
+            getTop5YearlyProductDetail();
         }
     }
 }

@@ -36,6 +36,9 @@ namespace MyShop.MVVM.View
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
             AnalyticsViewModel.getWeeklyTrendingProducts();
+            weeklyProductsList.ItemsSource = AnalyticsViewModel._trendingWeekyProducts;
+            monthlyProductsList.ItemsSource= AnalyticsViewModel._trendingMonthProducts;
+            yearlyProductsList.ItemsSource= AnalyticsViewModel._trendingYearProducts;
         }
     }
 }
