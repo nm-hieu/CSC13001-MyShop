@@ -71,6 +71,7 @@
             Height="50"
             FontSize="14"
             Style="{StaticResource MenuItem}"
+            Command="{Binding AnalyticsViewCommand}"      
             />
         </StackPanel>
         <ContentControl
