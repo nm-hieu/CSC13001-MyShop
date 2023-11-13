@@ -14,7 +14,7 @@ namespace MyShop.Repositories
         {
             var builder = new SqlConnectionStringBuilder();
             builder.DataSource = "HUNGLEGION\\SQLSERVER";
-            builder.InitialCatalog = "Project1";
+            builder.InitialCatalog = "MyShopDB";
             builder.TrustServerCertificate = true;
             builder.IntegratedSecurity = true;
             //_connectionString = "Server=(local); Database=MyShopDB; Integrated Security=true";
