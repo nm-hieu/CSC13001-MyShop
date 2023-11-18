@@ -64,7 +64,7 @@ namespace MyShop.MVVM.ViewModel
         public async void ConnectToDB ()
         {
             var builder = new SqlConnectionStringBuilder();
-            builder.DataSource = "HUNGLEGION\\SQLSERVER";
+            builder.DataSource = "LAPTOP-9RV6F0G8\\SQLEXPRESS";
             builder.InitialCatalog = "MyShopDB";
             builder.TrustServerCertificate = true;
             builder.IntegratedSecurity = true;

@@ -7,7 +7,7 @@
         xmlns:viewModel="clr-namespace:MyShop.MVVM.ViewModel"
         xmlns:fa="http://schemas.fontawesome.io/icons/"
         mc:Ignorable="d"
-        Title="My Shop" Height="700" Width="1400"
+        Title="My Shop" Height="900" Width="1650"
         Background="White"
         WindowStartupLocation="CenterScreen"
         Loaded="Window_Loaded"
@@ -65,6 +65,7 @@
             Height="50"
             FontSize="14"
             Style="{StaticResource MenuItem}"
+            Command="{Binding OrdersViewCommand}" 
             />
             <RadioButton
             Content="analytics"
