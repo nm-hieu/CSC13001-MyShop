@@ -12,7 +12,6 @@ namespace MyShop.Core
     {
         private Action<object> _execute;
         private Func<object,bool> _canExecute;
-        private Action<object, RoutedEventArgs> signInViewModel_Loaded;
 
         public event EventHandler CanExecuteChanged
         {
@@ -23,11 +22,6 @@ namespace MyShop.Core
         {
             _execute = execute;
             _canExecute = canExecute;
-        }
-
-        public RelayCommand(Action<object, RoutedEventArgs> signInViewModel_Loaded)
-        {
-            this.signInViewModel_Loaded = signInViewModel_Loaded;
         }
 
         public bool CanExecute(object parameter)

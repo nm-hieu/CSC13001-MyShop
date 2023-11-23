@@ -16,6 +16,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using System.Data;
+using Microsoft.Data.SqlClient;
 
 namespace MyShop.MVVM.ViewModel
 {
@@ -34,21 +36,20 @@ namespace MyShop.MVVM.ViewModel
         private bool _isRememberServer = false;
         private bool _isConnectServer;
         
-        private DatabaseBase DBB;
         private Encrypt security;
 
         // Properties
         public string Username {
             get => _username;
-            set => _username = value; 
+            set { _username = value; OnPropertyChanged(nameof(Username)); }
         }
         public string Password { 
             get => _password; 
-            set => _password = value;
+            set { _password = value; OnPropertyChanged(nameof(Password)); }
         }
         public string ErrorMessage { 
             get => _errorMessage; 
-            set => _errorMessage = value;
+            set { _errorMessage = value; OnPropertyChanged(nameof(ErrorMessage)); }
         }
         public bool IsViewVisible { 
             get => _isViewVisible;
@@ -70,7 +71,7 @@ namespace MyShop.MVVM.ViewModel
         public string ServerMessage
         {
             get => _serverMessage;
-            set => _serverMessage = value;
+            set { _serverMessage = value; OnPropertyChanged(nameof(ServerMessage)); }
         }
         public bool RememberServer { 
             get => _isRememberServer; 
@@ -78,7 +79,7 @@ namespace MyShop.MVVM.ViewModel
         }
         public bool IsConnectServer { 
             get => _isConnectServer; 
-            set => _isConnectServer = DBB.ConnectToServer(Server, Database); 
+            set => _isConnectServer = value; 
         }
 
         // Command
@@ -96,7 +97,6 @@ namespace MyShop.MVVM.ViewModel
             RememberPasswordCommand = new RelayCommand(ExecuteRememberPasswordCommand);
             RememberServerCommand = new RelayCommand(ExecuteRememberServerCommand);
             ConnectServerCommand = new RelayCommand(ExecuteConnectServerCommand, CanExecuteConnectServerCommand);
-            DBB = new DatabaseBase();
             security = new Encrypt();
             //ShowPasswordCommand = new RelayCommand(ExecuteShowPasswordCommand);
         }
@@ -133,14 +133,19 @@ namespace MyShop.MVVM.ViewModel
 
             // TODO: Encrypt password to compare to SQL Server
             // Validation for admin role to sign in
-            var isValidUser = DBB.AuthenticateUser(new NetworkCredential(Username, Password));
+            var isValidUser = AuthenticateUser(new NetworkCredential(Username, Password));
             if (isValidUser)
             {
                 Thread.CurrentPrincipal = new GenericPrincipal(
                     new GenericIdentity(Username), null);
                 IsViewVisible = false;
 
-                var mainView = new MainWindow();
+                // TODO: Pass Server and Database to MainWindow
+                var mainView = new MainWindow
+                {
+                    Server = Server,
+                    Database = Database
+                };
                 mainView.Show();
                 Application.Current.MainWindow.Close();
             }
@@ -151,7 +156,7 @@ namespace MyShop.MVVM.ViewModel
         }
         private void ExecuteConnectServerCommand(object obj)
         {
-            IsConnectServer = DBB.ConnectToServer(Server, Database);
+            IsConnectServer = DatabaseBase.Instance.ConnectToServer(Server, Database);
             if (IsConnectServer)
             {
                 ServerMessage = "* Kết nối tới Server thành công";
@@ -196,6 +201,22 @@ namespace MyShop.MVVM.ViewModel
             }
             config.Save(ConfigurationSaveMode.Minimal);
             ConfigurationManager.RefreshSection("appSettings");
+        }
+
+        public bool AuthenticateUser(NetworkCredential credential)
+        {
+            bool validUser;
+            using (var connection = DatabaseBase.Instance.Connection)
+            using (var command = new SqlCommand())
+            {
+                command.Connection = connection;
+                command.CommandText = "select * from [User] where username=@username and [password]=@password and role=@role";
+                command.Parameters.Add("@username", SqlDbType.NVarChar).Value = credential.UserName;
+                command.Parameters.Add("@password", SqlDbType.NVarChar).Value = credential.Password;
+                command.Parameters.Add("@role", SqlDbType.NVarChar).Value = "admin";
+                validUser = command.ExecuteScalar() == null ? false : true;
+            }
+            return validUser;
         }
 
         //private void ExecuteShowPasswordCommand(object obj)

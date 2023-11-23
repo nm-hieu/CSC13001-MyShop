@@ -20,8 +20,8 @@
             <DataTemplate DataType="{x:Type viewModel:ProductsViewModel}">
                 <view:ProductsView/>
             </DataTemplate>
-            <DataTemplate DataType="{x:Type viewModel:SignInViewModel}">
-                <view:SignInView/>
+            <DataTemplate DataType="{x:Type viewModel:UserViewModel}">
+                <view:UserView/>
             </DataTemplate>
             <DataTemplate DataType="{x:Type viewModel:AnalyticsViewModel}">
                 <view:AnalyticsView/>

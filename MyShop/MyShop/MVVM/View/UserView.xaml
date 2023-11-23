@@ -5,79 +5,114 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:viewModel="clr-namespace:MyShop.MVVM.ViewModel"
              xmlns:local="clr-namespace:MyShop.MVVM.View" 
+             xmlns:core="clr-namespace:MyShop.Converters"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
              Background="White">
 
-    <Grid>
+    <UserControl.Resources>
+        <core:RelativeToAbsoluteConverter x:Key="absoluteConverter"/>
+    </UserControl.Resources>
+
+    <Grid x:Name="userViewGrid">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"  MaxWidth="200"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
         <Grid.RowDefinitions>
             <RowDefinition Height="*" MaxHeight="50"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
+        
+        <!--
+        <TextBox Grid.Column="0" 
+                 x:Name="SearchTextBox"
+                 VerticalAlignment="Center"
+                 Margin="0, 0, 10, 0"
+                 Padding="5"/>
+        <TextBlock Grid.Column="0" IsHitTestVisible="False" 
+                   Text="Tìm kiếm" 
+                   VerticalAlignment="Center" HorizontalAlignment="Left" 
+                   Margin="10,0,0,0" 
+                   Foreground="DarkGray">
+            <TextBlock.Style>
+                <Style TargetType="{x:Type TextBlock}">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Text, ElementName=SearchTextBox}" Value="">
+                            <Setter Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
+        </TextBlock>
 
-        <Grid Grid.Row="0" Grid.Column="0" 
-              VerticalAlignment="Center">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="2*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*" MaxWidth="100"/>
-            </Grid.ColumnDefinitions>
+        <Button Grid.Column="1"
+                VerticalAlignment="Center" HorizontalAlignment="Left"
+                Width="80" Padding="5" Margin="10, 0, 0, 0"
+                FontWeight="Bold"
+                Content="Tìm kiếm" 
+                Background="{StaticResource buttonColor1}"
+                Foreground="{StaticResource textColor1}"
+                BorderThickness="0"/>
+        -->
+        <Button Grid.Column="1"
+                VerticalAlignment="Center" HorizontalAlignment="Center"
+                Width="50" Padding="5" 
+                FontWeight="Bold"
+                Content="Reload" 
+                Command="{Binding ReloadCommand}"/>
+        <Button Grid.Column="1"
+                VerticalAlignment="Center" HorizontalAlignment="Right"
+                Width="150" Padding="5" 
+                FontWeight="Bold"
+                Content="Thêm User" 
+                Background="{StaticResource buttonColor1}"
+                Foreground="{StaticResource textColor1}"
+                BorderThickness="0"
+                Command="{Binding AddUserCommand}"/>
 
-            <TextBlock Grid.Column="0" 
-                       Text="Tìm theo:" 
-                       Margin="10, 0, 10, 0"/>
-            <TextBox Grid.Column="1" 
-                     Width="Auto" 
-                     Background="LightGray"
-                     Text="Tìm kiếm"/>
-            <Button Grid.Column="3"
-                    Content="Thêm User" 
-                    Margin="0, 0, 10, 0"/>
-        </Grid>
-
-        <ListView Grid.Row="1" Grid.Column="0"
-                    ScrollViewer.VerticalScrollBarVisibility="Hidden">
-            <ListView.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <WrapPanel />
-                </ItemsPanelTemplate>
-            </ListView.ItemsPanel>
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <Border BorderBrush="Gray"
-                            BorderThickness="1"
-                            CornerRadius="5">
-                        <WrapPanel Orientation="Vertical">
-                            <TextBlock Text="{Binding Username}" />
-                            <TextBlock Text="{Binding FullName}" />
-                            <Button Content="Edit"/>
-                            <Button Content="Delete"/>
-                        </WrapPanel>
-                    </Border>
-                </DataTemplate>
-            </ListView.ItemTemplate>
+        <ListView Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
+                  ScrollViewer.VerticalScrollBarVisibility="Auto"
+                  ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                  ItemsSource="{Binding UserList}">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="ID" Width="30" DisplayMemberBinding="{Binding ID}"/>
+                    <GridViewColumn Header="Avatar">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Image RenderOptions.BitmapScalingMode="HighQuality" 
+                                       Margin="10" Width="50" Height="50" 
+                                       Source="{Binding Avatar, Converter={StaticResource absoluteConverter}}">
+                                    <Image.Clip>
+                                        <EllipseGeometry
+                                            RadiusX="25"
+                                            RadiusY="25"
+                                            Center="25,25"/>
+                                    </Image.Clip>
+                                </Image>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="Username" Width="100" DisplayMemberBinding="{Binding Username}"/>
+                    <GridViewColumn Header="Fullname" Width="100" DisplayMemberBinding="{Binding FullName}"/>
+                    <GridViewColumn Header="Email" Width="150" DisplayMemberBinding="{Binding Email}"/>
+                    <GridViewColumn Header="Telephone" Width="100" DisplayMemberBinding="{Binding Telephone}"/>
+                    <GridViewColumn Header="Action">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Content="Edit"
+                                        Padding="20, 10"
+                                        VerticalAlignment="Center"
+                                        Command="{Binding Path=DataContext.EditUserCommand, ElementName=userViewGrid}"
+                                        CommandParameter="{Binding ID}"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                </GridView>
+            </ListView.View>
         </ListView>
-
-        <StackPanel Grid.Row="0" Grid.Column="1"
-                    VerticalAlignment="Center"
-                    Orientation="Horizontal">
-            <TextBlock Text="Chi tiết"
-                       Margin="10, 0, 50, 0"/>
-            <Button Content="Chỉnh sửa"
-                    Margin="0,0,10,0"/>
-            <Button Content="Xóa"/>
-        </StackPanel>
-        
-        
-        <!-- Place for UserDetail or AddUser
-        <ContentControl Grid.Row="1" Grid.Column="1"
-                        Content="{Binding CurrentAction}">
-        </ContentControl>-->
     </Grid>
 </UserControl>

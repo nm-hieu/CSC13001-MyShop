@@ -6,60 +6,63 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Data.SqlClient;
+using MyShop.MVVM.Model;
 
 namespace MyShop.Database
 {
     public class DatabaseBase
     {
-        private string _connectionString;
-        public string server, database;
-        protected SqlConnection GetConnection()
+        public string Server, Database;
+        public string ConnectionString { get; set; } = "";
+        private SqlConnection _connection = null;
+        private static DatabaseBase? _instance = null;
+
+        public SqlConnection? Connection
         {
-            
+            get
+            {
+                if (_connection == null)
+                {
+                    _connection = new SqlConnection(ConnectionString); ;
+                    _connection.Open();
+                }
 
-            var builder = new SqlConnectionStringBuilder();
-            builder.DataSource = server;
-            builder.InitialCatalog = database;
-            builder.TrustServerCertificate = true;
-            builder.IntegratedSecurity = true;
-            _connectionString = builder.ConnectionString;
-
-            return new SqlConnection(_connectionString);
+                return _connection;
+            }
+        }
+        public static DatabaseBase Instance
+        {
+            get
+            {
+                if (_instance == null)
+                {
+                    _instance = new DatabaseBase();
+                }
+                return _instance;
+            }
         }
         public bool ConnectToServer(string sv, string db)
         {
-            server = sv;
-            database = db;
-
+            Server = sv; Database = db;
             if (string.IsNullOrWhiteSpace(sv)|| string.IsNullOrWhiteSpace(db))
                 return false;
-            var connection = GetConnection();
+
+            var builder = new SqlConnectionStringBuilder();
+            builder.DataSource = sv;
+            builder.InitialCatalog = db;
+            builder.TrustServerCertificate = true;
+            builder.IntegratedSecurity = true;
+            ConnectionString = builder.ConnectionString;
+
             try
             {
-                connection.Open();
+                var connection = Connection;
                 return true;
             }
             catch (SqlException)
             {
                 return false;
             }
-        }
-
-        public bool AuthenticateUser(NetworkCredential credential)
-        {
-            bool validUser;
-            using (var connection = GetConnection())
-            using (var command = new SqlCommand())
-            {
-                connection.Open();
-                command.Connection = connection;
-                command.CommandText = "select * from [User] where username=@username and [password]=@password and role=@role";
-                command.Parameters.Add("@username", SqlDbType.NVarChar).Value = credential.UserName;
-                command.Parameters.Add("@password", SqlDbType.NVarChar).Value = credential.Password;
-                command.Parameters.Add("@role", SqlDbType.NVarChar).Value = "admin";
-                validUser = command.ExecuteScalar() == null ? false : true;
-            }
-            return validUser;
         }
     }
 }
