@@ -1,5 +1,4 @@
 ﻿using MyShop.Core;
-using MyShop.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,21 +31,21 @@ namespace MyShop.MVVM.ViewModel
                 OnPropertyChanged(nameof(Fullname));
             }
         }
-        private UserRepository userRepository;
-        public UserViewModel()
-        {
-            userRepository = new UserRepository();
-            loadAllUser();
-        }
-        private void loadAllUser()
-        {
-            var userList = userRepository.loadAllUser();
-            if (userList != null)
-            {
-                Username = "Username";
-                Fullname = "Fullname";
-            }
-        }
+
+        //public UserViewModel()
+        //{
+        //    userRepository = new UserRepository();
+        //    loadAllUser();
+        //}
+        //private void loadAllUser()
+        //{
+        //    var userList = userRepository.loadAllUser();
+        //    if (userList != null)
+        //    {
+        //        Username = "Username";
+        //        Fullname = "Fullname";
+        //    }
+        //}
 
     }
 }

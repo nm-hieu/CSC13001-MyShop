@@ -4,7 +4,7 @@
              xmlns:local="clr-namespace:MyShop.Converters"
              xmlns:viewModel="clr-namespace:MyShop.MVVM.ViewModel"
              xmlns:view="clr-namespace:MyShop.MVVM.View"
-             StartupUri="/MainWindow.xaml">
+             StartupUri="/MVVM/View/SignInView.xaml">
 
     <Application.Resources>
         <ResourceDictionary>
