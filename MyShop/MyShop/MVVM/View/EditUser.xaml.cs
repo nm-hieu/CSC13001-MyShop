@@ -1,8 +1,7 @@
-using MyShop.MVVM.Model;
+﻿using MyShop.MVVM.Model;
 using MyShop.MVVM.ViewModel;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,27 +12,21 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace MyShop.MVVM.View
 {
     /// <summary>
-    /// Interaction logic for UserView.xaml
+    /// Interaction logic for EditUser.xaml
     /// </summary>
-    public partial class UserView : UserControl
+    public partial class EditUser : Window
     {
-        UserViewModel userVM;
-        public UserView()
+        EditUserViewModel editUserVM;
+        public EditUser(UserModel user)
         {
             InitializeComponent();
-            this.Loaded += new RoutedEventHandler(OnLoad);
-        }
-
-        private void OnLoad(object sender, RoutedEventArgs e)
-        {
-            userVM = new UserViewModel();
-            this.DataContext = userVM;
+            editUserVM = new EditUserViewModel(user);
+            this.DataContext = editUserVM;
         }
     }
 }

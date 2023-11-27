@@ -74,6 +74,13 @@
             Style="{StaticResource MenuItem}"
             Command="{Binding AnalyticsViewCommand}"      
             />
+            <RadioButton
+            Content="Users"
+            Height="50"
+            FontSize="14"
+            Style="{StaticResource MenuItem}"
+            Command="{Binding UserViewCommand}"      
+            />
         </StackPanel>
         <ContentControl
             Grid.Row="1"

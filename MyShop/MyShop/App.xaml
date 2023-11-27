@@ -4,7 +4,7 @@
              xmlns:local="clr-namespace:MyShop.Converters"
              xmlns:viewModel="clr-namespace:MyShop.MVVM.ViewModel"
              xmlns:view="clr-namespace:MyShop.MVVM.View"
-             StartupUri="/MainWindow.xaml">
+             StartupUri="/MVVM/View/SignInView.xaml">
 
     <Application.Resources>
         <ResourceDictionary>
@@ -20,14 +20,17 @@
             <DataTemplate DataType="{x:Type viewModel:ProductsViewModel}">
                 <view:ProductsView/>
             </DataTemplate>
-            <DataTemplate DataType="{x:Type viewModel:SignInViewModel}">
-                <view:SignInView/>
-            </DataTemplate>
             <DataTemplate DataType="{x:Type viewModel:AnalyticsViewModel}">
                 <view:AnalyticsView/>
             </DataTemplate>
             <DataTemplate DataType="{x:Type viewModel:OrdersViewModel}">
                 <view:OrdersView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewModel:UserViewModel}">
+                <view:UserView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewModel:AnalyticsViewModel}">
+                <view:AnalyticsView/>
             </DataTemplate>
         </ResourceDictionary>
     </Application.Resources>

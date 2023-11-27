@@ -1,7 +1,6 @@
 ﻿using MyShop.Core;
-using MyShop.MVVM.Model;
 using MyShop.MVVM.View;
-using MyShop.Repositories;
+using MyShop.Database;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -18,6 +17,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using System.Data;
+using Microsoft.Data.SqlClient;
 
 namespace MyShop.MVVM.ViewModel
 {
@@ -28,58 +29,87 @@ namespace MyShop.MVVM.ViewModel
         private string _password;
         private string _errorMessage;
         private bool _isViewVisible = true;
-        private bool _isRemember = false;
+        private bool _isRememberMe = false;
+
+        private string _server;
+        private string _database;
+        private string _serverMessage;
+        private bool _isRememberServer = false;
+        private bool _isConnectServer;
         
+        private Encrypt security;
+
         // Properties
         public string Username {
             get => _username;
-            set { 
-                _username = value; 
-                } 
+            set { _username = value; OnPropertyChanged(nameof(Username)); }
         }
         public string Password { 
             get => _password; 
-            set { 
-                _password = value;
-            }
+            set { _password = value; OnPropertyChanged(nameof(Password)); }
         }
         public string ErrorMessage { 
             get => _errorMessage; 
-            set { 
-                _errorMessage = value;
-            }
+            set { _errorMessage = value; OnPropertyChanged(nameof(ErrorMessage)); }
         }
         public bool IsViewVisible { 
             get => _isViewVisible;
-            set { 
-                _isViewVisible = value;
-            }
+            set => _isViewVisible = value;
         }
         public bool RememberMe {
-            get => _isRemember;
-            set
-            {
-                _isRemember = value;
-                OnPropertyChanged(nameof(RememberMe));
-            }
+            get => _isRememberMe;
+            set => _isRememberMe = value;
+        }
+        public string Server { 
+            get => _server;
+            set { _server = value; OnPropertyChanged(nameof(Server)); }
+        }
+        public string Database
+        {
+            get => _database;
+            set { _database = value; OnPropertyChanged(nameof(Database)); }
+        }
+        public string ServerMessage
+        {
+            get => _serverMessage;
+            set { _serverMessage = value; OnPropertyChanged(nameof(ServerMessage)); }
+        }
+        public bool RememberServer { 
+            get => _isRememberServer; 
+            set => _isRememberServer = value; 
+        }
+        public bool IsConnectServer { 
+            get => _isConnectServer; 
+            set => _isConnectServer = value; 
         }
 
         // Command
+        //public ICommand ShowPasswordCommand { get; }
         public ICommand SignInCommand { get; }
-        public ICommand ShowPasswordCommand { get; }
         public ICommand RememberPasswordCommand { get; }
-        public ICommand LoadedCommand { get; }
-
-        private UserRepository userRepository;
+        public ICommand RememberServerCommand { get; }
+        public ICommand ConnectServerCommand { get; }
         
+
         // Constructor
         public SignInViewModel()
         {
-            userRepository = new UserRepository();
             SignInCommand = new RelayCommand(ExecuteSignInCommand, CanExecuteSignInCommand);
-            ShowPasswordCommand = new RelayCommand(ExecuteShowPasswordCommand);
             RememberPasswordCommand = new RelayCommand(ExecuteRememberPasswordCommand);
-            LoadedCommand = new RelayCommand(SignInViewModel_Load);
+            RememberServerCommand = new RelayCommand(ExecuteRememberServerCommand);
+            ConnectServerCommand = new RelayCommand(ExecuteConnectServerCommand, CanExecuteConnectServerCommand);
+            security = new Encrypt();
+            //ShowPasswordCommand = new RelayCommand(ExecuteShowPasswordCommand);
+        }
+
+        private bool CanExecuteConnectServerCommand(object arg)
+        {
+            bool validData;
+            if (string.IsNullOrWhiteSpace(Server) || string.IsNullOrWhiteSpace(Database))
+                validData = false;
+            else
+                validData = true;
+            return validData;
         }
 
         private bool CanExecuteSignInCommand(object arg)
@@ -94,22 +124,47 @@ namespace MyShop.MVVM.ViewModel
 
         private void ExecuteSignInCommand(object obj)
         {
-            // TODO: Encrypt password to save to SQL Server
+            // Validation for server connection
+            ConnectServerCommand.Execute(obj);
+            if (IsConnectServer == false)
+            {
+                ErrorMessage = "* Chưa kết nối với Server";
+                return;
+            }
 
-            var isValidUser = userRepository.AuthenticateUser(new NetworkCredential(Username, Password));
+            // TODO: Encrypt password to compare to SQL Server
+            // Validation for admin role to sign in
+            var isValidUser = AuthenticateUser(new NetworkCredential(Username, Password));
             if (isValidUser)
             {
                 Thread.CurrentPrincipal = new GenericPrincipal(
                     new GenericIdentity(Username), null);
                 IsViewVisible = false;
 
-                var mainView = new MainWindow();
+                // TODO: Pass Server and Database to MainWindow
+                var mainView = new MainWindow
+                {
+                    Server = Server,
+                    Database = Database
+                };
                 mainView.Show();
                 Application.Current.MainWindow.Close();
             }
             else
             {
                 ErrorMessage = "* Sai Username hoặc Mật khẩu";
+            }
+        }
+        private void ExecuteConnectServerCommand(object obj)
+        {
+            IsConnectServer = DatabaseBase.Instance.ConnectToServer(Server, Database);
+            if (IsConnectServer)
+            {
+                ServerMessage = "* Kết nối tới Server thành công";
+            }
+            else
+            {
+                ServerMessage = "* Sai Server hoặc Database";
             }
         }
 
@@ -120,8 +175,7 @@ namespace MyShop.MVVM.ViewModel
             if (RememberMe == true)
             {    
                 config.AppSettings.Settings["Username"].Value = Username;
-                //config.AppSettings.Settings["Password"].Value = Password;
-                config.AppSettings.Settings["Password"].Value = userRepository.Protect(Password);
+                config.AppSettings.Settings["Password"].Value = security.Protect(Password);
             }
             else
             {
@@ -132,22 +186,43 @@ namespace MyShop.MVVM.ViewModel
             ConfigurationManager.RefreshSection("appSettings");
         }
 
-        private void SignInViewModel_Load(object obj)
+        private void ExecuteRememberServerCommand(object obj)
         {
-            var PasswordInString = ConfigurationManager.AppSettings["Password"];
+            var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
 
-            if (PasswordInString.Length != 0)
+            if (RememberServer == true)
             {
-                Username = ConfigurationManager.AppSettings["Username"];
-                //Password = PasswordInString;
-                Password = userRepository.Unprotect(PasswordInString);
-                RememberMe = true;
+                config.AppSettings.Settings["Server"].Value = Server;
+                config.AppSettings.Settings["Database"].Value = Database;
             }
+            else
+            {
+                config.AppSettings.Settings["Server"].Value = "";
+                config.AppSettings.Settings["Database"].Value = "";
+            }
+            config.Save(ConfigurationSaveMode.Minimal);
+            ConfigurationManager.RefreshSection("appSettings");
         }
 
-        private void ExecuteShowPasswordCommand(object obj)
+        public bool AuthenticateUser(NetworkCredential credential)
         {
-            throw new NotImplementedException();
+            bool validUser;
+            using (var connection = DatabaseBase.Instance.Connection)
+            using (var command = new SqlCommand())
+            {
+                command.Connection = connection;
+                command.CommandText = "select * from [User] where username=@username and [password]=@password and role=@role";
+                command.Parameters.Add("@username", SqlDbType.NVarChar).Value = credential.UserName;
+                command.Parameters.Add("@password", SqlDbType.NVarChar).Value = credential.Password;
+                command.Parameters.Add("@role", SqlDbType.NVarChar).Value = "admin";
+                validUser = command.ExecuteScalar() == null ? false : true;
+            }
+            return validUser;
         }
+
+        //private void ExecuteShowPasswordCommand(object obj)
+        //{
+        //    throw new NotImplementedException();
+        //}
     }
 }

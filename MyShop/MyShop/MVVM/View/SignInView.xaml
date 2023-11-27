@@ -12,18 +12,6 @@
         ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen">
 
-    
-    <i:Interaction.Triggers>
-        <i:EventTrigger EventName="Loaded">
-            <i:InvokeCommandAction Command="{Binding LoadedCommand}" />
-        </i:EventTrigger>
-    </i:Interaction.Triggers>
-    
-
-    <Window.DataContext>
-        <viewModel:SignInViewModel/>
-    </Window.DataContext>
-
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibility"/>
     </Window.Resources>
@@ -33,87 +21,166 @@
     </Window.Visibility>
 
     <Border Background="{StaticResource BGColor1}">
-        <Border Background="{StaticResource BGColor2}"
-                Width="300"
-                CornerRadius="30"
-                BorderBrush="{StaticResource borderColor1}"
-                BorderThickness="2"
-                Padding="20"
-                Margin="0, 30">
-            <StackPanel Orientation="Vertical">
-                <TextBlock Text="MyShop"
-                           Foreground="{StaticResource titleColor}"
-                           TextAlignment="Center"
-                           FontSize="20"
-                           FontWeight="Bold"
-                           Margin="0, 0, 0, 20"/>
-            
-                <TextBlock Text="Username"
-                           Foreground="{StaticResource textColor1}"
-                           FontSize="16"
-                           FontWeight="Bold"
-                           Margin="0, 0, 0, 10"/>
-            
-                <TextBox Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}"
-                         Background="{StaticResource BGColor3}"
-                         Foreground="{StaticResource textColor1}"
-                         BorderBrush="Transparent"
-                         FontSize="13"
-                         FontWeight="Medium"
-                         VerticalAlignment="Center"
-                         Padding="10, 5, 10, 5"
-                         Margin="0, 0, 0, 10"/>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
 
-                <TextBlock Text="Mật khẩu"
-                           Foreground="{StaticResource textColor1}"
-                           FontSize="16"
-                           FontWeight="Bold"
-                           Margin="0, 0, 0, 10"/>
+            <Border Grid.Column="0"
+                    Background="{StaticResource BGColor2}"
+                    Width="auto"
+                    CornerRadius="30"
+                    BorderBrush="{StaticResource borderColor1}"
+                    BorderThickness="2"
+                    Padding="20"
+                    Margin="50, 30, 25, 30">
+                <StackPanel Orientation="Vertical">
+                    <TextBlock Text="SERVER - DATABASE"
+                               Foreground="{StaticResource titleColor}"
+                               TextAlignment="Center"
+                               FontSize="20"
+                               FontWeight="Bold"
+                               Margin="0, 0, 0, 20"/>
 
-                <customcontrols:BindablePasswordBox Password="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                                    Margin="0, 0, 0, 10"/>
+                    <TextBlock Text="Server"
+                               Foreground="{StaticResource textColor1}"
+                               FontSize="16"
+                               FontWeight="Bold"
+                               Margin="0, 0, 0, 10"/>
 
-                <TextBlock Text="{Binding ErrorMessage}"
-                           Foreground="{StaticResource textColor-error}"
-                           FontSize="16"
-                           FontWeight="Bold"
-                           Margin="0, 0, 0, 10"
-                           TextWrapping="Wrap"/>
+                    <TextBox Text="{Binding Server, UpdateSourceTrigger=PropertyChanged}"
+                             x:Name="Server"
+                             Background="{StaticResource BGColor3}"
+                             Foreground="{StaticResource textColor1}"
+                             BorderBrush="Transparent"
+                             FontSize="13"
+                             FontWeight="Medium"
+                             VerticalAlignment="Center"
+                             Padding="10, 5, 10, 5"
+                             Margin="0, 0, 0, 10"/>
 
-                <WrapPanel Margin="0,0,0,20">
-                    <CheckBox IsChecked="{Binding RememberMe}"
-                              Command="{Binding RememberPasswordCommand}"
-                              Width="20"
-                              Height="20"
-                              BorderBrush="Transparent"/>
+                    <TextBlock Text="Database"
+                               Foreground="{StaticResource textColor1}"
+                               FontSize="16"
+                               FontWeight="Bold"
+                               Margin="0, 0, 0, 10"/>
 
-                    <TextBlock Text="Ghi nhớ lần đăng nhập này"
-                               Foreground="{StaticResource textColor1}"/>
-                </WrapPanel>
+                    <TextBox Text="{Binding Database, UpdateSourceTrigger=PropertyChanged}"
+                             x:Name="Database"
+                             Background="{StaticResource BGColor3}"
+                             Foreground="{StaticResource textColor1}"
+                             BorderBrush="Transparent"
+                             FontSize="13"
+                             FontWeight="Medium"
+                             VerticalAlignment="Center"
+                             Padding="10, 5, 10, 5"
+                             Margin="0, 0, 0, 10"/>
+
+                    <TextBlock Text="{Binding ServerMessage}"
+                               x:Name="ServerMessage"
+                               Foreground="{StaticResource textColor-error}"
+                               FontSize="16"
+                               FontWeight="Bold"
+                               Margin="0, 0, 0, 10"
+                               TextWrapping="Wrap"/>
+
+                    <WrapPanel Margin="0,0,0,20">
+                        <CheckBox IsChecked="{Binding RememberServer}"
+                                  x:Name="RememberServer"
+                                  Command="{Binding RememberServerCommand}"
+                                  Width="20"
+                                  Height="20"
+                                  BorderBrush="Transparent"/>
+
+                        <TextBlock Text="Ghi nhớ lần kết nối này"
+                                   Foreground="{StaticResource textColor1}"/>
+                    </WrapPanel>
+
+                    <Button Command="{Binding ConnectServerCommand}"
+                            Content="KẾT NỐI"
+                            Style="{StaticResource ActionButton}"
+                            FontSize="16"
+                            Height="35">
+                    </Button>
+
+                </StackPanel>
+            </Border>
+
+            <Border Grid.Column="1"
+                    Background="{StaticResource BGColor2}"
+                    Width="auto"
+                    CornerRadius="30"
+                    BorderBrush="{StaticResource borderColor1}"
+                    BorderThickness="2"
+                    Padding="20"
+                    Margin="25, 30, 50, 30">
+                <StackPanel Orientation="Vertical">
+                    <TextBlock Text="USER"
+                               Foreground="{StaticResource titleColor}"
+                               TextAlignment="Center"
+                               FontSize="20"
+                               FontWeight="Bold"
+                               Margin="0, 0, 0, 20"/>
+
+                    <TextBlock Text="Username"
+                               Foreground="{StaticResource textColor1}"
+                               FontSize="16"
+                               FontWeight="Bold"
+                               Margin="0, 0, 0, 10"/>
+
+                    <TextBox Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}"
+                             x:Name="Username"
+                             Background="{StaticResource BGColor3}"
+                             Foreground="{StaticResource textColor1}"
+                             BorderBrush="Transparent"
+                             FontSize="13"
+                             FontWeight="Medium"
+                             VerticalAlignment="Center"
+                             Padding="10, 5, 10, 5"
+                             Margin="0, 0, 0, 10"/>
+
+                    <TextBlock Text="Mật khẩu"
+                               Foreground="{StaticResource textColor1}"
+                               FontSize="16"
+                               FontWeight="Bold"
+                               Margin="0, 0, 0, 10"/>
+
+                    <customcontrols:BindablePasswordBox Password="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                        x:Name="Password" 
+                                                        Margin="0, 0, 0, 10"/>
+
+                    <TextBlock Text="{Binding ErrorMessage}"
+                               x:Name="ErrorMessage"
+                               Foreground="{StaticResource textColor-error}"
+                               FontSize="16"
+                               FontWeight="Bold"
+                               Margin="0, 0, 0, 10"
+                               TextWrapping="Wrap"/>
+
+                    <WrapPanel Margin="0,0,0,20">
+                        <CheckBox IsChecked="{Binding RememberMe}"
+                                  x:Name="RememberMe"
+                                  Command="{Binding RememberPasswordCommand}"
+                                  Width="20"
+                                  Height="20"
+                                  BorderBrush="Transparent"/>
+
+                        <TextBlock Text="Ghi nhớ lần đăng nhập này"
+                                   Foreground="{StaticResource textColor1}"/>
+                    </WrapPanel>
 
                 <Button Command="{Binding SignInCommand}"
                         Content="ĐĂNG NHẬP"
-                        Style="{StaticResource ActionButton}"
+                        Style="{StaticResource actionButton}"
+                        FontWeight="Bold"
                         FontSize="16"
-                        Height="35">
+                        Height="35"
+                        BorderBrush="Transparent">
 
                     
                 </Button>
 
-                <!--<StackPanel Orientation="Horizontal"
-                            HorizontalAlignment="Center"
-                            Margin="0,15,0,0">
-                    <TextBlock Text="Quên mật khẩu?"
-                               Foreground="{StaticResource textColor2}"
-                               FontSize="12"
-                               FontWeight="Medium"/>
-                    <TextBlock Text="Đặt lại"
-                               Foreground="{StaticResource textColor1}"
-                               FontSize="12"
-                               FontWeight="Medium"
-                               Cursor="Hand"
-                               Margin="8,0,0,0"/>
-                </StackPanel>-->
             </StackPanel>
         </Border>
     </Border>

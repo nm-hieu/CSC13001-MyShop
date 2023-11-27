@@ -1,5 +1,8 @@
-﻿using System;
+﻿using MyShop.Database;
+using MyShop.MVVM.Model;
+using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,14 +23,25 @@ namespace MyShop
     /// </summary>
     public partial class MainWindow : Window
     {
+        private string _sv;
+        private string _db;
+
+        public string Server {  get => _sv; set => _sv = value; }
+        public string Database {  get => _db; set => _db = value; }
+
         public MainWindow()
         {
             InitializeComponent();
         }
 
+        //public void connectToDB()
+        //{
+        //    DatabaseBase.Instance.ConnectToServer(Server, Database);
+        //}
+
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-           
+            //connectToDB();
         }
 
         private void ToggleButton_Checked(object sender, RoutedEventArgs e)

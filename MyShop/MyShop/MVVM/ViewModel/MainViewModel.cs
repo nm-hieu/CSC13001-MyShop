@@ -1,4 +1,4 @@
-﻿using MyShop.Core;
+using MyShop.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,12 +12,16 @@ namespace MyShop.MVVM.ViewModel
         private object _currentView;
         public RelayCommand HomeViewCommand { get; set; }
         public RelayCommand ProductsViewCommand { get; set; }
+        public RelayCommand AnalyticsViewCommand { get; set; }  
+        public RelayCommand UserViewCommand { get; set; }
+
+        public RelayCommand ProductsViewCommand { get; set; }
         public RelayCommand AnalyticsViewCommand { get; set; }
         public RelayCommand OrdersViewCommand { get; set; }
 
         public HomeViewModel HomeVM { get; set; }
         public ProductsViewModel ProductsVM { get; set; }
-        public SignInViewModel SignInVM { get; set; }
+        public UserViewModel UserVM { get; set; }
         public AnalyticsViewModel AnalyticsVM { get; set; }
         public OrdersViewModel OrdersVM { get; set; }
         public object CurrentView
@@ -30,12 +34,12 @@ namespace MyShop.MVVM.ViewModel
         {
             HomeVM = new HomeViewModel();
             ProductsVM = new ProductsViewModel();
-            SignInVM = new SignInViewModel();
+           AnalyticsVM = new AnalyticsViewModel();
+            UserVM = new UserViewModel();
             AnalyticsVM = new AnalyticsViewModel();
             OrdersVM = new OrdersViewModel();
             CurrentView = HomeVM;
             
-
             HomeViewCommand = new RelayCommand(o =>
             {
                 CurrentView = HomeVM;
@@ -45,7 +49,10 @@ namespace MyShop.MVVM.ViewModel
             {
                 CurrentView = ProductsVM;
             });
-
+            UserViewCommand = new RelayCommand(o =>
+            {
+                CurrentView = UserVM;
+            });
             AnalyticsViewCommand = new RelayCommand(o =>
             {
                 CurrentView = AnalyticsVM;
