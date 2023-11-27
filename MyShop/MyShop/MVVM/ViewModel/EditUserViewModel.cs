@@ -43,6 +43,7 @@ namespace MyShop.MVVM.ViewModel
         public string Email {  get; set; }
         public string Telephone {  get; set; }
         public string Address {  get; set; }
+        public string Message { get; set; }
         
         string[] getAvatarList()
         {
@@ -137,9 +138,6 @@ namespace MyShop.MVVM.ViewModel
             {
                 if (cfScreen.isConfirm == true)
                 {
-                    // TODO:
-                    // 1. Check if duplicate field in database
-                    // 2. Reload ListView auto
                     if (EditUserData(_user) == true)
                     {
                         MessageBox.Show("Cập nhật thành công!");
@@ -172,7 +170,15 @@ namespace MyShop.MVVM.ViewModel
                 command.Parameters.AddWithValue("@Telephone", Telephone);
                 command.Parameters.AddWithValue("@Address", Address);
 
-                int rowsAffected = command.ExecuteNonQuery();
+                int rowsAffected = 0;
+                try
+                {
+                    rowsAffected = command.ExecuteNonQuery();
+                }
+                catch (SqlException)
+                {
+                    Message = "Username/Email/Telephone đã được sử dụng";
+                }
 
                 // < 0 is failed
                 return rowsAffected > 0;
@@ -186,9 +192,6 @@ namespace MyShop.MVVM.ViewModel
             {
                 if (cfScreen.isConfirm == true)
                 {
-                    // TODO:
-                    // 1. Check if duplicate field in database
-                    // 2. Reload ListView auto
                     if (DeleteUserData(_user) == true)
                     {
                         MessageBox.Show("Xoá User thành công!");
@@ -212,8 +215,16 @@ namespace MyShop.MVVM.ViewModel
                 command.Connection = connection;
                 command.CommandText = sql;
                 command.Parameters.AddWithValue("@ID", user.ID);
-                
-                int rowsAffected = command.ExecuteNonQuery();
+
+                int rowsAffected = 0;
+                try
+                {
+                    rowsAffected = command.ExecuteNonQuery();
+                }
+                catch (SqlException)
+                {
+                    Message = "User ID không tồn tại";
+                }
 
                 // < 0 is failed
                 return rowsAffected > 0;
