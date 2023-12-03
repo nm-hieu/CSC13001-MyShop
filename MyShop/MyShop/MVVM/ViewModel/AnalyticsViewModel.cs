@@ -28,8 +28,9 @@ namespace MyShop.MVVM.ViewModel
 
         public AnalyticsViewModel()
         {
-            ConnectToDB();
+            //ConnectToDB();
         }
+        /*
         public async void ConnectToDB()
         {
             var builder = new SqlConnectionStringBuilder();
@@ -67,6 +68,7 @@ namespace MyShop.MVVM.ViewModel
                 );
             }
         }
+        */
         private string sqlTrendingWeeklyProduct()
         {
             int week = -1;

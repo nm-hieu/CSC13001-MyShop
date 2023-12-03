@@ -1,5 +1,4 @@
 ﻿using Microsoft.Data.SqlClient;
-using Microsoft.Data.SqlClient;
 using MyShop.Core;
 using MyShop.MVVM.Model;
 using MyShop.MVVM.View;
@@ -34,6 +33,7 @@ using System.Windows;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using static MyShop.MVVM.ViewModel.ProductsViewModel;
+using MyShop.Database;
 
 namespace MyShop.MVVM.ViewModel
 {
@@ -58,7 +58,7 @@ namespace MyShop.MVVM.ViewModel
         bool desc = false;
 
         public ProductsViewModel() {
-            ConnectToDB();
+            //ConnectToDB();
         }
 
         private void initOrder()
@@ -73,13 +73,13 @@ namespace MyShop.MVVM.ViewModel
             LoadAllProducts();
             LoadCategories();
             initOrder();
-
         }
-
+        /*
         public async void ConnectToDB ()
         {
             var builder = new SqlConnectionStringBuilder();
-            builder.DataSource = "LAPTOP-9RV6F0G8\\SQLEXPRESS";
+            //builder.DataSource = "LAPTOP-9RV6F0G8\\SQLEXPRESS";
+            builder.DataSource = "HIEU-PC";
             builder.InitialCatalog = "MyShopDB";
             builder.TrustServerCertificate = true;
             builder.IntegratedSecurity = true;
@@ -113,6 +113,8 @@ namespace MyShop.MVVM.ViewModel
                 );
             }
         }
+        */
+       
         private string selectTable(string tableName)
         {
             var sql = $"select *, count(*) over() as Total from {tableName} ";

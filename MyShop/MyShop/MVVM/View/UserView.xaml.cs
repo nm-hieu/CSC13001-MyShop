@@ -33,6 +33,7 @@ namespace MyShop.MVVM.View
         private void OnLoad(object sender, RoutedEventArgs e)
         {
             userVM = new UserViewModel();
+            userVM.loadUserData();
             this.DataContext = userVM;
         }
     }

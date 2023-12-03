@@ -59,6 +59,7 @@ namespace MyShop.MVVM.ViewModel
             }
             AvatarList = _avatarList;
         }
+        /*
         public void addUserData()
         {
             _user = new UserModel
@@ -73,6 +74,7 @@ namespace MyShop.MVVM.ViewModel
                 Address = Address,
             };
         }
+        */
         
         public ICommand AddUserCommand { get; set; }
         private UserModel _user;
@@ -82,7 +84,7 @@ namespace MyShop.MVVM.ViewModel
         {
             loadRoleData();
             loadAvatarData();
-            addUserData();
+            //addUserData();
             AddUserCommand = new RelayCommand(ExecuteAddUserCommand);
         }
         private int getLastID(string tableName)
@@ -109,6 +111,7 @@ namespace MyShop.MVVM.ViewModel
                     if (AddUserData(_user, ID) == true)
                     {
                         MessageBox.Show("Thêm User thành công!");
+                        Message = "";
                     }
                     else
                     {
@@ -123,43 +126,39 @@ namespace MyShop.MVVM.ViewModel
             string sql = @"INSERT INTO [User] (  ID,  Avatar,  Username,  Password,  FirstName,  LastName,  Role,  Email,  Telephone,  Address)
                                         VALUES (@ID, @Avatar, @Username, @Password, @FirstName, @LastName, @Role, @Email, @Telephone, @Address);";
 
-            using (var connection = new SqlConnection(DatabaseBase.Instance.ConnectionString))
-            using (var command = new SqlCommand())
+            SqlCommand command = new SqlCommand(sql, DB.Instance.Connection);
+            
+            if (ID == -1)
             {
-                connection.Open();
-                command.Connection = connection;
-                command.CommandText = sql;
-                if (ID == -1)
-                {
-                    command.Parameters.AddWithValue("@ID", user.ID);
-                }
-                else
-                {
-                    command.Parameters.AddWithValue("@ID", ID);
-                }
-                command.Parameters.AddWithValue("@Avatar", AvatarList[AvatarIndex]);
-                command.Parameters.AddWithValue("@Username", Username);
-                command.Parameters.AddWithValue("@Password", "password");
-                command.Parameters.AddWithValue("@FirstName", FirstName);
-                command.Parameters.AddWithValue("@LastName", LastName);
-                command.Parameters.AddWithValue("@Role", RoleList[RoleIndex]);
-                command.Parameters.AddWithValue("@Email", Email);
-                command.Parameters.AddWithValue("@Telephone", Telephone);
-                command.Parameters.AddWithValue("@Address", Address);
-
-                int rowsAffected = 0;
-                try
-                {
-                    rowsAffected = command.ExecuteNonQuery();
-                }
-                catch (SqlException)
-                {
-                    Message = "Username/Email/Telephone đã được sử dụng";
-                }
-
-                // < 0 is failed
-                return rowsAffected > 0;
+                command.Parameters.AddWithValue("@ID", user.ID);
             }
+            else
+            {
+                command.Parameters.AddWithValue("@ID", ID);
+            }
+            command.Parameters.AddWithValue("@Avatar", AvatarList[AvatarIndex]);
+            command.Parameters.AddWithValue("@Username", Username);
+            command.Parameters.AddWithValue("@Password", "password");
+            command.Parameters.AddWithValue("@FirstName", FirstName);
+            command.Parameters.AddWithValue("@LastName", LastName);
+            command.Parameters.AddWithValue("@Role", RoleList[RoleIndex]);
+            command.Parameters.AddWithValue("@Email", Email);
+            command.Parameters.AddWithValue("@Telephone", Telephone);
+            command.Parameters.AddWithValue("@Address", Address);
+
+            int rowsAffected = 0;
+            try
+            {
+                rowsAffected = command.ExecuteNonQuery();
+            }
+            catch (SqlException)
+            {
+                Message = "Username/Email/Telephone đã được sử dụng";
+            }
+
+            // < 0 is failed
+            return rowsAffected > 0;
+            
         }
     }
 }

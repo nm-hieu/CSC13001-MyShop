@@ -1,4 +1,5 @@
-﻿using MyShop.Database;
+﻿using Microsoft.Data.SqlClient;
+using MyShop.Database;
 using MyShop.MVVM.Model;
 using System;
 using System.Collections.Generic;
@@ -23,25 +24,20 @@ namespace MyShop
     /// </summary>
     public partial class MainWindow : Window
     {
-        private string _sv;
-        private string _db;
-
-        public string Server {  get => _sv; set => _sv = value; }
-        public string Database {  get => _db; set => _db = value; }
-
         public MainWindow()
         {
             InitializeComponent();
         }
 
-        //public void connectToDB()
-        //{
-        //    DatabaseBase.Instance.ConnectToServer(Server, Database);
-        //}
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            // Close the SQL Server connection
+            DB.Instance.Connection.Close();
+        }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            //connectToDB();
+
         }
 
         private void ToggleButton_Checked(object sender, RoutedEventArgs e)

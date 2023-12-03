@@ -10,12 +10,12 @@ using System.Windows;
 using MyShop.Database;
 using Microsoft.Data.SqlClient;
 using System.Diagnostics;
-using Microsoft.Identity.Client.Platforms.Features.DesktopOs.Kerberos;
 using System.Data;
 using MyShop.MVVM.View;
 using System.Windows.Input;
 using System.Windows.Controls;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 
 namespace MyShop.MVVM.ViewModel
 {
@@ -27,8 +27,6 @@ namespace MyShop.MVVM.ViewModel
         
         public UserViewModel()
         {
-            loadUserData();
-
             EditUserCommand = new RelayCommand(ExecuteEditUserCommmand);
             AddUserCommand = new RelayCommand(o =>
             {
@@ -41,48 +39,44 @@ namespace MyShop.MVVM.ViewModel
             });
         }
 
-        private ObservableCollection<UserModel> _userList = new ObservableCollection<UserModel>();
-        public ObservableCollection<UserModel> UserList { get => _userList; set => _userList = value; }
+        private BindingList<UserModel> _userList = new BindingList<UserModel>();
+        public BindingList<UserModel> UserList { get => _userList; set => _userList = value; }
         public void loadUserData()
         {
-            using (var connection = new SqlConnection(DatabaseBase.Instance.ConnectionString))
-            using (var command = new SqlCommand())
+            string sql = "select *, count(*) over() as Total from [User]";
+            SqlCommand command = new SqlCommand(sql, DB.Instance.Connection);
+
+            var reader = command.ExecuteReader();
+            UserList.Clear();
+
+            while (reader.Read())
             {
-                connection.Open();
-                command.Connection = connection;
-                command.CommandText = "select *, count(*) over() as Total from [User]";
-                var reader = command.ExecuteReader();
-                UserList.Clear();
+                int id = (int)reader["ID"];
+                string username = (string)reader["Username"];
+                string firstName = (string)reader["FirstName"];
+                string lastName = (string)reader["LastName"];
+                string role = (string)reader["Role"];
+                string email = (string)reader["Email"];
+                string telephone = (string)reader["Telephone"];
+                string address = (string)reader["Address"];
+                string avatar = (string)reader["Avatar"];
 
-                while (reader.Read())
+                var user = new UserModel()
                 {
-                    int id = (int)reader["ID"];
-                    string username = (string)reader["Username"];
-                    string firstName = (string)reader["FirstName"];
-                    string lastName = (string)reader["LastName"];
-                    string role = (string)reader["Role"];
-                    string email = (string)reader["Email"];
-                    string telephone = (string)reader["Telephone"];
-                    string address = (string)reader["Address"];
-                    string avatar = (string)reader["Avatar"];
-
-                    var user = new UserModel()
-                    {
-                        ID = id,
-                        Username = username,
-                        FirstName = firstName,
-                        LastName = lastName,
-                        FullName = firstName + " " + lastName,
-                        Role = role,
-                        Email = email,
-                        Telephone = telephone,
-                        Address = address,
-                        Avatar = avatar,
-                    };
-                    UserList.Add(user);
-                }
-                reader.Close();
+                    ID = id,
+                    Username = username,
+                    FirstName = firstName,
+                    LastName = lastName,
+                    FullName = firstName + " " + lastName,
+                    Role = role,
+                    Email = email,
+                    Telephone = telephone,
+                    Address = address,
+                    Avatar = avatar,
+                };
+                UserList.Add(user);
             }
+            reader.Close();
         }
 
         private void ExecuteEditUserCommmand(object obj)

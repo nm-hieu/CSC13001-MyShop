@@ -1,6 +1,7 @@
 ﻿using MyShop.Core;
 using MyShop.MVVM.View;
 using MyShop.Database;
+using MyShop.MVVM.Model;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -19,6 +20,7 @@ using System.Windows;
 using System.Windows.Input;
 using System.Data;
 using Microsoft.Data.SqlClient;
+using Microsoft.Identity.Client.Platforms.Features.DesktopOs.Kerberos;
 
 namespace MyShop.MVVM.ViewModel
 {
@@ -35,7 +37,6 @@ namespace MyShop.MVVM.ViewModel
         private string _database;
         private string _serverMessage;
         private bool _isRememberServer = false;
-        private bool _isConnectServer;
         
         private Encrypt security;
 
@@ -78,10 +79,7 @@ namespace MyShop.MVVM.ViewModel
             get => _isRememberServer; 
             set => _isRememberServer = value; 
         }
-        public bool IsConnectServer { 
-            get => _isConnectServer; 
-            set => _isConnectServer = value; 
-        }
+        public bool IsConnectServer { get; set; }
 
         // Command
         //public ICommand ShowPasswordCommand { get; }
@@ -133,8 +131,9 @@ namespace MyShop.MVVM.ViewModel
             }
 
             // TODO: Encrypt password to compare to SQL Server
-            // Validation for admin role to sign in
+            // Validation for admin role to sign 
             var isValidUser = AuthenticateUser(new NetworkCredential(Username, Password));
+
             if (isValidUser)
             {
                 Thread.CurrentPrincipal = new GenericPrincipal(
@@ -142,11 +141,14 @@ namespace MyShop.MVVM.ViewModel
                 IsViewVisible = false;
 
                 // TODO: Pass Server and Database to MainWindow
-                var mainView = new MainWindow
-                {
-                    Server = Server,
-                    Database = Database
-                };
+                var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+                config.AppSettings.Settings["CurrentUserID"].Value = getCurrentUserID(Username).ToString();
+                config.AppSettings.Settings["CurrentServer"].Value = Server;
+                config.AppSettings.Settings["CurrentDatabase"].Value = Database;
+                config.Save(ConfigurationSaveMode.Minimal);
+                ConfigurationManager.RefreshSection("appSettings");
+
+                var mainView = new MainWindow();
                 mainView.Show();
                 Application.Current.MainWindow.Close();
             }
@@ -155,9 +157,60 @@ namespace MyShop.MVVM.ViewModel
                 ErrorMessage = "* Sai Username hoặc Mật khẩu";
             }
         }
+        private int getCurrentUserID(string Username)
+        {
+            int ID = -1;
+            string sql = $"select ID from [User] where Username=@Username";
+            SqlCommand command = new SqlCommand(sql, DB.Instance.Connection);
+            command.Parameters.AddWithValue("@Username", Username);
+
+            var reader = command.ExecuteReader();
+            
+            while (reader.Read())
+            {
+                ID = (int)reader["ID"];
+            }
+            reader.Close();
+
+            return ID;
+        }
+        private void ConnectToServer(string sv, string db)
+        {
+            if (string.IsNullOrWhiteSpace(sv) || string.IsNullOrWhiteSpace(db))
+                IsConnectServer = false;
+
+            var builder = new SqlConnectionStringBuilder();
+            builder.DataSource = sv;
+            builder.InitialCatalog = db;
+            builder.TrustServerCertificate = true;
+            builder.IntegratedSecurity = true;
+            
+            string connectionString = builder.ConnectionString;
+
+            var connection = new SqlConnection(connectionString);
+
+            try
+            {
+                connection.Open();
+            }
+            catch (SqlException)
+            {
+                connection = null;
+            }
+                
+            if (connection != null)
+            {
+                IsConnectServer = true;
+                DB.Instance.ConnectionString = connectionString;
+            }
+            else
+            {
+                IsConnectServer = false;
+            }
+        }
         private void ExecuteConnectServerCommand(object obj)
         {
-            IsConnectServer = DatabaseBase.Instance.ConnectToServer(Server, Database);
+            ConnectToServer(Server, Database);
             if (IsConnectServer)
             {
                 ServerMessage = "* Kết nối tới Server thành công";
@@ -207,17 +260,16 @@ namespace MyShop.MVVM.ViewModel
         public bool AuthenticateUser(NetworkCredential credential)
         {
             bool validUser;
-            using (var connection = DatabaseBase.Instance.Connection)
             using (var command = new SqlCommand())
             {
-                command.Connection = connection;
+                command.Connection = DB.Instance.Connection;
                 command.CommandText = "select * from [User] where username=@username and [password]=@password and role=@role";
                 command.Parameters.Add("@username", SqlDbType.NVarChar).Value = credential.UserName;
                 command.Parameters.Add("@password", SqlDbType.NVarChar).Value = credential.Password;
                 command.Parameters.Add("@role", SqlDbType.NVarChar).Value = "admin";
                 validUser = command.ExecuteScalar() == null ? false : true;
             }
-            return validUser;
+            return validUser;   
         }
 
         //private void ExecuteShowPasswordCommand(object obj)

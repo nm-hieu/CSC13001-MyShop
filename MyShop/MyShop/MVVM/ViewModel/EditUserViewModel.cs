@@ -13,29 +13,12 @@ using static Azure.Core.HttpHeader;
 using Microsoft.Data.SqlClient;
 using MyShop.Database;
 using System.ComponentModel;
+using System.Configuration;
 
 namespace MyShop.MVVM.ViewModel
 {
     class EditUserViewModel : ObservableObject
     {
-        /*
-        private string _username;
-        private string _firstname;
-        private string _lastname;
-        private string _role;
-        private string _email;
-        private string _telephone;
-        private string _address;
-        
-        public string Username { get => _username; set => _username = value; }
-        public string FirstName { get => _firstname; set { _firstname = value; OnPropertyChanged(nameof(FirstName)); } }
-        public string LastName { get => _lastname; set => _lastname = value; }
-        public string Role { get => _role; set => _role = value; }
-        public string Email { get => _email; set => _email = value; }
-        public string Telephone { get => _telephone; set => _telephone = value; }
-        public string Address { get => _address; set => _address = value; }
-        */
-        
         public string Username {  get; set; }
         public string FirstName {  get; set; }
         public string LastName {  get; set; }
@@ -141,6 +124,7 @@ namespace MyShop.MVVM.ViewModel
                     if (EditUserData(_user) == true)
                     {
                         MessageBox.Show("Cập nhật thành công!");
+                        Message = "";
                     } else
                     {
                         MessageBox.Show("Không có cập nhật");
@@ -154,35 +138,30 @@ namespace MyShop.MVVM.ViewModel
             string sql = @"UPDATE [User] Set Avatar = @Avatar, Username = @Username, FirstName = @FirstName, LastName = @LastName,
                                             Role = @Role, Email = @Email, Telephone = @Telephone, Address = @Address where ID = @ID";
 
-            using (var connection = new SqlConnection(DatabaseBase.Instance.ConnectionString))
-            using (var command = new SqlCommand())
+            SqlCommand command = new SqlCommand(sql, DB.Instance.Connection);
+
+            command.Parameters.AddWithValue("@ID", user.ID);
+            command.Parameters.AddWithValue("@Avatar", AvatarList[AvatarIndex]);
+            command.Parameters.AddWithValue("@Username", Username);
+            command.Parameters.AddWithValue("@FirstName", FirstName);
+            command.Parameters.AddWithValue("@LastName", LastName);
+            command.Parameters.AddWithValue("@Role", RoleList[RoleIndex]);
+            command.Parameters.AddWithValue("@Email", Email);
+            command.Parameters.AddWithValue("@Telephone", Telephone);
+            command.Parameters.AddWithValue("@Address", Address);
+
+            int rowsAffected = 0;
+            try
             {
-                connection.Open();
-                command.Connection = connection;
-                command.CommandText = sql;
-                command.Parameters.AddWithValue("@ID", user.ID);
-                command.Parameters.AddWithValue("@Avatar", AvatarList[AvatarIndex]);
-                command.Parameters.AddWithValue("@Username", Username);
-                command.Parameters.AddWithValue("@FirstName", FirstName);
-                command.Parameters.AddWithValue("@LastName", LastName);
-                command.Parameters.AddWithValue("@Role", RoleList[RoleIndex]);
-                command.Parameters.AddWithValue("@Email", Email);
-                command.Parameters.AddWithValue("@Telephone", Telephone);
-                command.Parameters.AddWithValue("@Address", Address);
-
-                int rowsAffected = 0;
-                try
-                {
-                    rowsAffected = command.ExecuteNonQuery();
-                }
-                catch (SqlException)
-                {
-                    Message = "Username/Email/Telephone đã được sử dụng";
-                }
-
-                // < 0 is failed
-                return rowsAffected > 0;
+                rowsAffected = command.ExecuteNonQuery();
             }
+            catch (SqlException)
+            {
+                Message = "Username/Email/Telephone đã được sử dụng";
+            }
+
+            // < 0 is failed
+            return rowsAffected > 0;
         }
 
         private void ExecuteDeleteCommand(object obj)
@@ -208,15 +187,15 @@ namespace MyShop.MVVM.ViewModel
         {
             string sql = @"DELETE FROM [User] where ID = @ID";
 
-            using (var connection = new SqlConnection(DatabaseBase.Instance.ConnectionString))
-            using (var command = new SqlCommand())
-            {
-                connection.Open();
-                command.Connection = connection;
-                command.CommandText = sql;
-                command.Parameters.AddWithValue("@ID", user.ID);
+            SqlCommand command = new SqlCommand(sql, DB.Instance.Connection);
 
-                int rowsAffected = 0;
+            command.Parameters.AddWithValue("@ID", user.ID);
+
+            int rowsAffected = 0;
+
+            if (user.ID.ToString() != ConfigurationManager.AppSettings["CurrentUserID"])
+            {
+                // Delete user if this is not the current log in user
                 try
                 {
                     rowsAffected = command.ExecuteNonQuery();
@@ -225,10 +204,13 @@ namespace MyShop.MVVM.ViewModel
                 {
                     Message = "User ID không tồn tại";
                 }
-
-                // < 0 is failed
-                return rowsAffected > 0;
+            } else
+            {
+                Message = "Không thể xóa User đang đăng nhập";
             }
+
+            // < 0 is failed
+            return rowsAffected > 0;
         }
     }
 }

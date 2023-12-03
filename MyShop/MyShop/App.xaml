@@ -29,9 +29,6 @@
             <DataTemplate DataType="{x:Type viewModel:UserViewModel}">
                 <view:UserView/>
             </DataTemplate>
-            <DataTemplate DataType="{x:Type viewModel:AnalyticsViewModel}">
-                <view:AnalyticsView/>
-            </DataTemplate>
         </ResourceDictionary>
     </Application.Resources>
 </Application>
