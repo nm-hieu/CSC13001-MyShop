@@ -69,34 +69,64 @@ namespace MyShop.MVVM.ViewModel
         public MainViewModel() 
         {
             ConnectToServer();
+
             HomeVM = new HomeViewModel();
             ProductsVM = new ProductsViewModel();
             UserVM = new UserViewModel();
             AnalyticsVM = new AnalyticsViewModel();
             OrdersVM = new OrdersViewModel();
-            CurrentView = HomeVM;
-            
+
+            string view = ConfigurationManager.AppSettings["CurrentView"];
+            switch (view)
+            {
+                case "ProductsVM":
+                    CurrentView = ProductsVM;
+                    break;
+                case "UserVM":
+                    CurrentView = UserVM;
+                    break;
+                case "AnalyticsVM":
+                    CurrentView = AnalyticsVM;
+                    break;
+                case "OrdersVM":
+                    CurrentView = OrdersVM;
+                    break;
+                default:
+                    CurrentView = HomeVM;
+                    break;
+            }
+
+            var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+
             HomeViewCommand = new RelayCommand(o =>
             {
                 CurrentView = HomeVM;
+                config.AppSettings.Settings["CurrentView"].Value = "HomeVM";
             });
-
             ProductsViewCommand= new RelayCommand(o =>
             {
                 CurrentView = ProductsVM;
+                config.AppSettings.Settings["CurrentView"].Value = "ProductsVM";
             });
             UserViewCommand = new RelayCommand(o =>
             {
                 CurrentView = UserVM;
+                config.AppSettings.Settings["CurrentView"].Value = "UserVM";
             });
             AnalyticsViewCommand = new RelayCommand(o =>
             {
                 CurrentView = AnalyticsVM;
+                config.AppSettings.Settings["CurrentView"].Value = "AnalyticsVM";
             });
             OrdersViewCommand = new RelayCommand(o =>
             {
                 CurrentView = OrdersVM;
+                config.AppSettings.Settings["CurrentView"].Value = "OrdersVM";
+                
             });
+
+            config.Save(ConfigurationSaveMode.Minimal);
+            ConfigurationManager.RefreshSection("appSettings");
         }
     }
 }

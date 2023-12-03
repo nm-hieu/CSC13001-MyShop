@@ -38,50 +38,45 @@
             FontSize="21"
             Margin="20 0 0 0"
         />
-        <ToggleButton Content="Toggle Sidebar" HorizontalAlignment="Left" x:Name="toggleButton" Grid.Column="0" Grid.Row="1" Checked="ToggleButton_Checked" Unchecked="ToggleButton_Unchecked"/>
-        <StackPanel
-            Name="sidebar"
-            Grid.Column="0"
-            Grid.Row="2"
-            Width="200"
-            >
+        <ToggleButton Content="Toggle Sidebar" HorizontalAlignment="Left" x:Name="toggleButton" 
+                      Margin="10" Padding="10, 0" FontWeight="Bold"
+                      Grid.Column="0" Grid.Row="1" 
+                      Checked="ToggleButton_Checked" Unchecked="ToggleButton_Unchecked"/>
+        <StackPanel Name="sidebar"
+                    Grid.Column="0"
+                    Grid.Row="2"
+                    Width="200">
             <RadioButton
-            Content="DashBoard"
-            Height="50"
-            FontSize="14"
-            Style="{StaticResource MenuItem}"
-            IsChecked="True"
-            Command="{Binding HomeViewCommand}"
-            >
-            </RadioButton>
+                Content="DashBoard"
+                Height="50"
+                FontSize="14"
+                Style="{StaticResource MenuItem}"
+
+                Command="{Binding HomeViewCommand}"/>
             <RadioButton
-            Content= "Products"
-            Height="50"
-            FontSize="14"
-            Style="{StaticResource MenuItem}"
-            Command="{Binding ProductsViewCommand}"      
-            />
+                Content= "Products"
+                Height="50"
+                FontSize="14"
+                Style="{StaticResource MenuItem}"
+                Command="{Binding ProductsViewCommand}"/>
             <RadioButton
-            Content="orders"
-            Height="50"
-            FontSize="14"
-            Style="{StaticResource MenuItem}"
-            Command="{Binding OrdersViewCommand}" 
-            />
+                Content="orders"
+                Height="50"
+                FontSize="14"
+                Style="{StaticResource MenuItem}"
+                Command="{Binding OrdersViewCommand}" />
             <RadioButton
-            Content="analytics"
-            Height="50"
-            FontSize="14"
-            Style="{StaticResource MenuItem}"
-            Command="{Binding AnalyticsViewCommand}"      
-            />
+                Content="analytics"
+                Height="50"
+                FontSize="14"
+                Style="{StaticResource MenuItem}"
+                Command="{Binding AnalyticsViewCommand}"/>
             <RadioButton
-            Content="Users"
-            Height="50"
-            FontSize="14"
-            Style="{StaticResource MenuItem}"
-            Command="{Binding UserViewCommand}"      
-            />
+                Content="Users"
+                Height="50"
+                FontSize="14"
+                Style="{StaticResource MenuItem}"
+                Command="{Binding UserViewCommand}" />
         </StackPanel>
         <ContentControl
             Grid.Row="1"
