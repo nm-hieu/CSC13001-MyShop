@@ -77,6 +77,12 @@
                 FontSize="14"
                 Style="{StaticResource MenuItem}"
                 Command="{Binding UserViewCommand}" />
+            <RadioButton
+                Content="Statistic"
+                Height="50"
+                FontSize="14"
+                Style="{StaticResource MenuItem}"
+                Command="{Binding StatisticViewCommand}" />
         </StackPanel>
         <ContentControl
             Grid.Row="1"

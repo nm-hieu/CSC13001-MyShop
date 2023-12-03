@@ -84,7 +84,7 @@
             <ComboBox.ItemTemplate>
                 <DataTemplate>
                     <TextBlock>
-                        <Run Text="{Binding Page}"/>/<Run Text="{Binding Total}"/>
+                        <Run Text="{Binding Page, Mode=OneTime}"/>/<Run Text="{Binding Total,Mode=OneTime}"/>
                     </TextBlock>
                 </DataTemplate>
             </ComboBox.ItemTemplate>

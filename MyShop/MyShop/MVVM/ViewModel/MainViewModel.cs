@@ -20,12 +20,14 @@ namespace MyShop.MVVM.ViewModel
         public RelayCommand UserViewCommand { get; set; }
         public RelayCommand AnalyticsViewCommand { get; set; }  
         public RelayCommand OrdersViewCommand { get; set; }
+        public RelayCommand StatisticViewCommand { get; set; }
 
         public HomeViewModel HomeVM { get; set; }
         public ProductsViewModel ProductsVM { get; set; }
         public UserViewModel UserVM { get; set; }
         public AnalyticsViewModel AnalyticsVM { get; set; }
         public OrdersViewModel OrdersVM { get; set; }
+        public StatisticViewModel StatisticVM { get; set; }
         public object CurrentView
         {
             get { return _currentView;}
@@ -75,6 +77,7 @@ namespace MyShop.MVVM.ViewModel
             UserVM = new UserViewModel();
             AnalyticsVM = new AnalyticsViewModel();
             OrdersVM = new OrdersViewModel();
+            StatisticVM = new StatisticViewModel();
 
             string view = ConfigurationManager.AppSettings["CurrentView"];
             switch (view)
@@ -90,6 +93,9 @@ namespace MyShop.MVVM.ViewModel
                     break;
                 case "OrdersVM":
                     CurrentView = OrdersVM;
+                    break;
+                case "StatisticVM":
+                    CurrentView = StatisticVM;
                     break;
                 default:
                     CurrentView = HomeVM;
@@ -123,6 +129,11 @@ namespace MyShop.MVVM.ViewModel
                 CurrentView = OrdersVM;
                 config.AppSettings.Settings["CurrentView"].Value = "OrdersVM";
                 
+            });
+            StatisticViewCommand = new RelayCommand(o =>
+            {
+                CurrentView = StatisticVM;
+                config.AppSettings.Settings["CurrentView"].Value = "StatisticVM";
             });
 
             config.Save(ConfigurationSaveMode.Minimal);
