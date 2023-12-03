@@ -20,13 +20,12 @@
     </Window.DataContext>
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" MaxWidth="200"/>
+            <ColumnDefinition Width="Auto" MaxWidth="110"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
         <Grid.RowDefinitions>
             <RowDefinition Height="75" />
-            <RowDefinition Height="50"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
 
@@ -38,10 +37,6 @@
             FontSize="21"
             Margin="20 0 0 0"
         />
-        <ToggleButton Content="Toggle Sidebar" HorizontalAlignment="Left" x:Name="toggleButton" 
-                      Margin="10" Padding="10, 0" FontWeight="Bold"
-                      Grid.Column="0" Grid.Row="1" 
-                      Checked="ToggleButton_Checked" Unchecked="ToggleButton_Unchecked"/>
         <StackPanel Name="sidebar"
                     Grid.Column="0"
                     Grid.Row="2"

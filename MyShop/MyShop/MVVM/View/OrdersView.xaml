@@ -15,208 +15,229 @@
         <converter:RelativeToAbsoluteConverter x:Key="PathConverter"/>
     </UserControl.Resources>
 
-    <Canvas>
-        <ListView Name="productsListView"
-              Height="500" Width="400"
-              Canvas.Left="20" Canvas.Top="20"
-              HorizontalAlignment="Center" VerticalAlignment="Top"
-              ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-            <ListView.ItemContainerStyle>
-                <Style TargetType="{x:Type ListViewItem}"/>
-            </ListView.ItemContainerStyle>
-            <ListView.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <WrapPanel/>
-                </ItemsPanelTemplate>
-            </ListView.ItemsPanel>
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <StackPanel Orientation="Vertical" Height="150" Width="100">
-                        <Image RenderOptions.BitmapScalingMode="HighQuality"
-                           Margin="0,0,5,0" Width="40" Height="70"
-                           Source="{Binding Image, Converter={StaticResource PathConverter}}"/>
-                        <TextBlock Text="{Binding Name}"
-                               HorizontalAlignment="Center"
-                               TextAlignment="Center"
-                               TextWrapping="Wrap"/>
-                        <TextBlock Text="{Binding Price, Converter={StaticResource PriceConverter}}"
-                               HorizontalAlignment="Center"/>
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+    <StackPanel >
+        <DockPanel LastChildFill="True" >
+                <WrapPanel DockPanel.Dock="Top" Orientation="Horizontal" HorizontalAlignment="Center">
+                    <StackPanel Margin="20,0,20,0">
+                        <ListView Name="productsListView"
+Height="500" Width="400"
+Canvas.Left="20" Canvas.Top="20"
+HorizontalAlignment="Center" VerticalAlignment="Top"
+ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                            <ListView.ItemContainerStyle>
+                                <Style TargetType="{x:Type ListViewItem}"/>
+                            </ListView.ItemContainerStyle>
+                            <ListView.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel/>
+                                </ItemsPanelTemplate>
+                            </ListView.ItemsPanel>
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Vertical" Height="150" Width="100">
+                                        <Image RenderOptions.BitmapScalingMode="HighQuality"
+             Margin="0,0,5,0" Width="40" Height="70"
+             Source="{Binding Image, Converter={StaticResource PathConverter}}"/>
+                                        <TextBlock Text="{Binding Name}"
+                 HorizontalAlignment="Center"
+                 TextAlignment="Center"
+                 TextWrapping="Wrap"/>
+                                        <TextBlock Text="{Binding Price, Converter={StaticResource PriceConverter}}"
+                 HorizontalAlignment="Center"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+
+                        <StackPanel Margin="0,20,0,0">
+                            <Button Name="btnAddToOrder" Content="Add item to Order"
+              FontSize="20"
+                      Width="200"
+              Click="btnAddToOrder_Click"/>
+                        </StackPanel>
                     </StackPanel>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+                    <StackPanel Margin="20,0,20,0">
+                        <TextBlock Text="Items per page" FontSize="20" Width="139" Height="40" Canvas.Left="450" Canvas.Top="20" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                            <Button Margin="0,0,20,0" x:Name="previousButton" Width="80" Height="34" Content="Previous" Click="previousButton_Click"/>
+                            <ComboBox Margin="0,0,20,0" x:Name="pageRowComboBox" Width="70" Height="32" SelectionChanged="pageRowComboBox_SelectionChanged" >
+                                <ComboBoxItem Content="2"/>
+                                <ComboBoxItem Content="5"/>
+                                <ComboBoxItem Content="10"/>
+                            </ComboBox>
+                            <Button x:Name="nextButton" Width="80" Height="34" Content="Next" Click="nextButton_Click"/>
+                        </StackPanel>
 
-        <Button Name="btnAddToOrder" Content="Add item to Order"
-            FontSize="20"
-            Canvas.Left="137"
-            Canvas.Top="562"
-            Click="btnAddToOrder_Click"/>
+                        <ComboBox Name="pagingComboBox" Width="200" Height="35" Canvas.Left="555" Canvas.Top="79" SelectionChanged="pagingComboBox_SelectionChanged" HorizontalAlignment="Center" VerticalAlignment="Top">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock>
+            <Run Text="{Binding Page}"/>/<Run Text="{Binding Total}"/>
+                                    </TextBlock>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
 
-        <Button Name="btnAddOrder" Content="New Order"
-            FontSize="20"
-            Width="150" Height="50"
-            Canvas.Right="320"
-            Canvas.Top="670"
-            Click="btnAddOrder_Click"/>
+                        <ListView Name="ordersListView"
+        Canvas.Left="450" Canvas.Top="128"
+        SelectionChanged="ordersListView_SelectionChanged" HorizontalAlignment="Center" VerticalAlignment="Top">
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn Header="Receipt ID" DisplayMemberBinding="{Binding ID}" Width="90"/>
+                                    <GridViewColumn Header="Total Price" DisplayMemberBinding="{Binding TotalPrice, Converter={StaticResource PriceConverter}}" Width="160"/>
+                                    <GridViewColumn Header="Date" DisplayMemberBinding="{Binding Date, Converter={StaticResource DateConverter}}" Width="160"/>
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
 
-        <Button Name="btnDeleteOrder" Content="Delete Order"
-            Width="150" Height="50"
-            FontSize="20"
-            Canvas.Right="20"
-            Canvas.Top="670"
-            Click="btnDeleteOrder_Click"/>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                            <TextBlock Text="Date from" FontSize="20"/>
+                            <DatePicker x:Name="pickerDateFrom" Height="30"  HorizontalAlignment="Left">
+                                <DatePicker.Style>
+                                    <Style TargetType="{x:Type DatePicker}">
+                                        <Setter Property="IsDropDownOpen" Value="False"/>
+                                        <Style.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="IsDropDownOpen" Value="True"/>
+                                            </Trigger>
+                                            <Trigger Property="IsMouseOver" Value="False">
+                                                <Setter Property="IsDropDownOpen" Value="False"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </DatePicker.Style>
+                            </DatePicker>
+                            <TextBlock Text="Date To" FontSize="20" Height="40"/>
+                            <DatePicker x:Name="pickerDateTo" Width="100" Height="30"  HorizontalAlignment="Left" Canvas.Left="720" Canvas.Top="443" VerticalAlignment="Center"  >
+                                <DatePicker.Style>
+                                    <Style TargetType="{x:Type DatePicker}">
+                                        <Setter Property="IsDropDownOpen" Value="False"/>
+                                        <Style.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="IsDropDownOpen" Value="True"/>
+                                            </Trigger>
+                                            <Trigger Property="IsMouseOver" Value="False">
+                                                <Setter Property="IsDropDownOpen" Value="False"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </DatePicker.Style>
+                            </DatePicker>
 
-        <ListView Name="ordersListView"
-              Canvas.Left="450" Canvas.Top="128"
-              SelectionChanged="ordersListView_SelectionChanged" HorizontalAlignment="Center" VerticalAlignment="Top">
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn Header="Receipt ID" DisplayMemberBinding="{Binding ID}" Width="90"/>
-                    <GridViewColumn Header="Total Price" DisplayMemberBinding="{Binding TotalPrice, Converter={StaticResource PriceConverter}}" Width="160"/>
-                    <GridViewColumn Header="Date" DisplayMemberBinding="{Binding Date, Converter={StaticResource DateConverter}}" Width="160"/>
-                </GridView>
-            </ListView.View>
-        </ListView>
+                        </StackPanel>
 
-        <Button x:Name="previousButton" Width="80" Height="34" Content="Previous" Canvas.Left="450" Canvas.Top="80" Click="previousButton_Click" HorizontalAlignment="Center" VerticalAlignment="Top"/>
-        <Button x:Name="nextButton" Width="80" Height="34" Content="Next" Canvas.Left="780" Canvas.Top="80" HorizontalAlignment="Center" VerticalAlignment="Top" Click="nextButton_Click"/>
-        <ComboBox Name="pagingComboBox" Width="200" Height="35" Canvas.Left="555" Canvas.Top="79" SelectionChanged="pagingComboBox_SelectionChanged" HorizontalAlignment="Center" VerticalAlignment="Top">
-            <ComboBox.ItemTemplate>
-                <DataTemplate>
-                    <TextBlock>
-                        <Run Text="{Binding Page}"/>/<Run Text="{Binding Total}"/>
-                    </TextBlock>
-                </DataTemplate>
-            </ComboBox.ItemTemplate>
-        </ComboBox>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        </StackPanel>
 
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                            <Button Content="Filter" Width="100" Height="44" Click="Button_Filter_Click" Canvas.Left="579" Canvas.Top="493" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                        </StackPanel>
 
-        <Border Canvas.Right="20" Canvas.Top="20"
-            BorderThickness="1"
-            BorderBrush="Black">
-            <Grid Name="receiptTitle" Width="450" Height="600">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="4*"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-                <TextBlock Text="SALES RECEIPT"
-                       FontSize="50"
-                       TextAlignment="Center"
-                       HorizontalAlignment="Center"
-                       VerticalAlignment="Center"
-                       FontWeight="DemiBold"/>
-                <Grid Grid.Row="1">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="2*"/>
-                        <ColumnDefinition Width="2*"/>
-                        <ColumnDefinition Width="2*"/>
-                    </Grid.ColumnDefinitions>
-                    <TextBlock Text="Date: "
-                           FontSize="20"
-                           VerticalAlignment="Center"
-                           HorizontalAlignment="Left"
-                           Margin="10"/>
-                    <TextBlock Grid.Column="1"
-                           Text="{Binding Date, Converter={StaticResource DateConverter}}"
-                           FontSize="20"
-                           VerticalAlignment="Center"
-                           HorizontalAlignment="Left"
-                           Margin="10"/>
-                    <TextBlock Grid.Column="2"
-                           Text="Receipt No: "
-                           FontSize="20"
-                           VerticalAlignment="Center"
-                           HorizontalAlignment="Left"
-                           Margin="10"/>
-                    <TextBlock Grid.Column="3"
-                           Text="{Binding ID}"
-                           FontSize="20"
-                           VerticalAlignment="Center"
-                           HorizontalAlignment="Left"
-                           Margin="10"/>
-                </Grid>
-                <ListView Grid.Row="2"
-                      Name="orderDetails"
-                      Margin="10"
-                      ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-                    <ListView.ItemContainerStyle>
-                        <Style TargetType="ListViewItem">
-                            <Setter Property="Focusable" Value="False"/>
-                        </Style>
-                    </ListView.ItemContainerStyle>
-                    <ListView.View>
-                        <GridView>
-                            <GridViewColumn Header="Product ID" DisplayMemberBinding="{Binding ID}"
-                                        Width="100"/>
-                            <GridViewColumn Header="Product Name" DisplayMemberBinding="{Binding Name}"
-                                        Width="200"/>
-                            <GridViewColumn Header="Price" DisplayMemberBinding="{Binding Price, Converter={StaticResource PriceConverter}}"
-                                        Width="130"/>
-                        </GridView>
-                    </ListView.View>
-                </ListView>
+                    </StackPanel>
+                    <StackPanel Margin="20,0,20,0">
+                        <Border Canvas.Right="20" Canvas.Top="20"
+      BorderThickness="1"
+      BorderBrush="Black">
+                            <Grid Name="receiptTitle" Width="450" Height="600">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="4*"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <TextBlock Text="SALES RECEIPT"
+                 FontSize="50"
+                 TextAlignment="Center"
+                 HorizontalAlignment="Center"
+                 VerticalAlignment="Center"
+                 FontWeight="DemiBold"/>
+                                <Grid Grid.Row="1">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="2*"/>
+                                        <ColumnDefinition Width="2*"/>
+                                        <ColumnDefinition Width="2*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="Date: "
+                     FontSize="20"
+                     VerticalAlignment="Center"
+                     HorizontalAlignment="Left"
+                     Margin="10"/>
+                                    <TextBlock Grid.Column="1"
+                     Text="{Binding Date, Converter={StaticResource DateConverter}}"
+                     FontSize="20"
+                     VerticalAlignment="Center"
+                     HorizontalAlignment="Left"
+                     Margin="10"/>
+                                    <TextBlock Grid.Column="2"
+                     Text="Receipt No: "
+                     FontSize="20"
+                     VerticalAlignment="Center"
+                     HorizontalAlignment="Left"
+                     Margin="10"/>
+                                    <TextBlock Grid.Column="3"
+                     Text="{Binding ID}"
+                     FontSize="20"
+                     VerticalAlignment="Center"
+                     HorizontalAlignment="Left"
+                     Margin="10"/>
+                                </Grid>
+                                <ListView Grid.Row="2"
+                Name="orderDetails"
+                Margin="10"
+                ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                                    <ListView.ItemContainerStyle>
+                                        <Style TargetType="ListViewItem">
+                                            <Setter Property="Focusable" Value="False"/>
+                                        </Style>
+                                    </ListView.ItemContainerStyle>
+                                    <ListView.View>
+                                        <GridView>
+                                            <GridViewColumn Header="Product ID" DisplayMemberBinding="{Binding ID}"
+                                  Width="100"/>
+                                            <GridViewColumn Header="Product Name" DisplayMemberBinding="{Binding Name}"
+                                  Width="200"/>
+                                            <GridViewColumn Header="Price" DisplayMemberBinding="{Binding Price, Converter={StaticResource PriceConverter}}"
+                                  Width="130"/>
+                                        </GridView>
+                                    </ListView.View>
+                                </ListView>
 
-                <TextBlock Grid.Row="3"
-                       Text="Total Price: "
-                       FontSize="20"
-                       HorizontalAlignment="Center"
-                       VerticalAlignment="Center"/>
-                <TextBlock Grid.Row="3"
-                       Text="{Binding TotalPrice, Converter={StaticResource PriceConverter}}"
-                       FontSize="20"
-                       HorizontalAlignment="Right"
-                       VerticalAlignment="Center"
-                       Margin="0 0 20 0"/>
-            </Grid>
-        </Border>
-        <TextBlock Text="Items per page" FontSize="20" Width="139" Height="40" Canvas.Left="450" Canvas.Top="20" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                                <TextBlock Grid.Row="3"
+                 Text="Total Price: "
+                 FontSize="20"
+                 HorizontalAlignment="Center"
+                 VerticalAlignment="Center"/>
+                                <TextBlock Grid.Row="3"
+                 Text="{Binding TotalPrice, Converter={StaticResource PriceConverter}}"
+                 FontSize="20"
+                 HorizontalAlignment="Right"
+                 VerticalAlignment="Center"
+                 Margin="0 0 20 0"/>
+                            </Grid>
+                        </Border>
 
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                            <Button Name="btnAddOrder" Content="New Order" Margin="0,0,20,0"
+      FontSize="20"
+      Width="150" Height="50"
+      Canvas.Right="320"
+      Canvas.Top="670"
+      Click="btnAddOrder_Click"/>
 
-        <TextBlock Text="Date from" FontSize="20" Width="138" Height="40" Canvas.Left="450" Canvas.Top="403" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <Button Name="btnDeleteOrder" Content="Delete Order"
+      Width="150" Height="50"
+      FontSize="20"
+      Canvas.Right="20"
+      Canvas.Top="670"
+      Click="btnDeleteOrder_Click"/>
 
-        <TextBlock Text="Date To" FontSize="20" Width="138" Height="40" Canvas.Left="728" Canvas.Top="403" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </StackPanel>
+                </WrapPanel>
 
-        <Button Content="Filter" Width="100" Height="44" Click="Button_Filter_Click" Canvas.Left="579" Canvas.Top="493" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-
-        <DatePicker x:Name="pickerDateFrom" Width="100" Height="30"  HorizontalAlignment="Left" Canvas.Left="450" Canvas.Top="443" VerticalAlignment="Top"  >
-            <DatePicker.Style>
-                <Style TargetType="{x:Type DatePicker}">
-                    <Setter Property="IsDropDownOpen" Value="False"/>
-                    <Style.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="IsDropDownOpen" Value="True"/>
-                        </Trigger>
-                        <Trigger Property="IsMouseOver" Value="False">
-                            <Setter Property="IsDropDownOpen" Value="False"/>
-                        </Trigger>
-                    </Style.Triggers>
-                </Style>
-            </DatePicker.Style>
-        </DatePicker>
-        <DatePicker x:Name="pickerDateTo" Width="100" Height="30"  HorizontalAlignment="Left" Canvas.Left="720" Canvas.Top="443" VerticalAlignment="Center"  >
-            <DatePicker.Style>
-                <Style TargetType="{x:Type DatePicker}">
-                    <Setter Property="IsDropDownOpen" Value="False"/>
-                    <Style.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="IsDropDownOpen" Value="True"/>
-                        </Trigger>
-                        <Trigger Property="IsMouseOver" Value="False">
-                            <Setter Property="IsDropDownOpen" Value="False"/>
-                        </Trigger>
-                    </Style.Triggers>
-                </Style>
-            </DatePicker.Style>
-        </DatePicker>
-        <ComboBox x:Name="pageRowComboBox" Width="70" Height="32" Canvas.Left="594" Canvas.Top="24" SelectionChanged="pageRowComboBox_SelectionChanged" HorizontalAlignment="Left" VerticalAlignment="Top">
-            <ComboBoxItem Content="2"/>
-            <ComboBoxItem Content="5"/>
-            <ComboBoxItem Content="10"/>
-        </ComboBox>
-
-
-    </Canvas>
+            </DockPanel>
+    </StackPanel>
+            </ScrollViewer>
 </UserControl>
