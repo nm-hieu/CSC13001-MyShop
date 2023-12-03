@@ -1,0 +1,37 @@
+﻿<UserControl x:Class="MyShop.MVVM.View.StatisticView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:MyShop.MVVM.View"
+             xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800"
+             Background="White"
+             Loaded="UserControl_Loaded">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="6*"/>
+        </Grid.RowDefinitions>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Button Content="Month" Width="80" Height="40" Name="monthButton" Click="monthButton_Click"/>
+            <Button Content="Year" Width="80" Height="40" Name="yearButton" Click="yearButton_Click" Visibility="Hidden"/>
+            <ComboBox Grid.Column="1" Width="80" Height="30" IsEnabled="False" Name="monthCombobox" SelectionChanged="monthCombobox_SelectionChanged"/>
+
+        </Grid>
+        
+        <lvc:CartesianChart Series="{Binding SeriesCollection}" LegendLocation="Left" Grid.Row="1" Name="lvchart">
+            <lvc:CartesianChart.AxisX>
+                <lvc:Axis Title="{Binding AxisXTitle}" FontSize="20" Labels="{Binding Labels}"></lvc:Axis>
+            </lvc:CartesianChart.AxisX>
+            <lvc:CartesianChart.AxisY>
+                <lvc:Axis Title="Doanh Thu" FontSize="20"  LabelFormatter="{Binding Formatter}"></lvc:Axis>
+            </lvc:CartesianChart.AxisY>
+        </lvc:CartesianChart> 
+    </Grid>
+</UserControl>
