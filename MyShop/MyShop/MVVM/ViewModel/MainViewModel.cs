@@ -70,7 +70,7 @@ namespace MyShop.MVVM.ViewModel
 
         public MainViewModel() 
         {
-            ConnectToServer();
+            //ConnectToServer();
 
             HomeVM = new HomeViewModel();
             ProductsVM = new ProductsViewModel();
@@ -103,41 +103,49 @@ namespace MyShop.MVVM.ViewModel
             }
 
             var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-
+            
             HomeViewCommand = new RelayCommand(o =>
             {
                 CurrentView = HomeVM;
                 config.AppSettings.Settings["CurrentView"].Value = "HomeVM";
+                config.Save(ConfigurationSaveMode.Minimal);
+                ConfigurationManager.RefreshSection("appSettings");
             });
-            ProductsViewCommand= new RelayCommand(o =>
+            ProductsViewCommand = new RelayCommand(o =>
             {
                 CurrentView = ProductsVM;
                 config.AppSettings.Settings["CurrentView"].Value = "ProductsVM";
+                config.Save(ConfigurationSaveMode.Minimal);
+                ConfigurationManager.RefreshSection("appSettings");
             });
             UserViewCommand = new RelayCommand(o =>
             {
                 CurrentView = UserVM;
                 config.AppSettings.Settings["CurrentView"].Value = "UserVM";
+                config.Save(ConfigurationSaveMode.Minimal);
+                ConfigurationManager.RefreshSection("appSettings");
             });
             AnalyticsViewCommand = new RelayCommand(o =>
             {
                 CurrentView = AnalyticsVM;
                 config.AppSettings.Settings["CurrentView"].Value = "AnalyticsVM";
+                config.Save(ConfigurationSaveMode.Minimal);
+                ConfigurationManager.RefreshSection("appSettings");
             });
             OrdersViewCommand = new RelayCommand(o =>
             {
                 CurrentView = OrdersVM;
                 config.AppSettings.Settings["CurrentView"].Value = "OrdersVM";
-                
+                config.Save(ConfigurationSaveMode.Minimal);
+                ConfigurationManager.RefreshSection("appSettings");
             });
             StatisticViewCommand = new RelayCommand(o =>
             {
                 CurrentView = StatisticVM;
                 config.AppSettings.Settings["CurrentView"].Value = "StatisticVM";
+                config.Save(ConfigurationSaveMode.Minimal);
+                ConfigurationManager.RefreshSection("appSettings");
             });
-
-            config.Save(ConfigurationSaveMode.Minimal);
-            ConfigurationManager.RefreshSection("appSettings");
         }
     }
 }
