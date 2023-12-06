@@ -96,7 +96,7 @@ namespace MyShop.MVVM.ViewModel
                     CurrentView = StatisticVM;
                     break;
                 default:
-                    CurrentView = ProductsVM;
+                    CurrentView = OrdersVM;
                     break;
             }
 
