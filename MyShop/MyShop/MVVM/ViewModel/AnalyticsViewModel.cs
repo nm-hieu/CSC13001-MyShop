@@ -122,10 +122,21 @@ namespace MyShop.MVVM.ViewModel
 
         private string sqlTrendingProductDetail(List<int> weeklyItemIds)
         {
-            string conditionString = string.Join(" or ", weeklyItemIds.Select(id => $"ID = {id}"));
-            var sql = $"select * from Products where {conditionString} ";
-            Debug.WriteLine( sql );
-            return sql;
+            string conditionString = "";
+            if (weeklyItemIds.Count() != 0)
+            {
+            conditionString = string.Join(" or ", weeklyItemIds.Select(id => $"ID = {id}"));
+
+            }
+            if (conditionString != "")
+            {
+                var sql = $"select * from Products where {conditionString} ";
+                Debug.WriteLine(sql);
+                return sql;
+            }
+
+            return conditionString;
+            
         }
 
         private void getTop5WeeklyProductID ()
@@ -150,6 +161,12 @@ namespace MyShop.MVVM.ViewModel
         private void getTop5WeeklyProductDetail()
         {
             var sql = sqlTrendingProductDetail(weeklyItemIds);
+
+            if (sql == "")
+            {
+                return;
+            }
+
             var command = new SqlCommand(sql, DB.Instance.Connection);
 
             var reader = command.ExecuteReader();
@@ -235,6 +252,10 @@ namespace MyShop.MVVM.ViewModel
         private void getTop5MonthlyProductDetail()
         {
             var sql = sqlTrendingProductDetail(monthlyItemIds);
+            if (sql == "")
+            {
+                return;
+            }
             var command = new SqlCommand(sql, DB.Instance.Connection);
 
             var reader = command.ExecuteReader();

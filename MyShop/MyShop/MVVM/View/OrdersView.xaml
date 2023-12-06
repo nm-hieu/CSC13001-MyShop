@@ -58,27 +58,31 @@ ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                         </StackPanel>
                     </StackPanel>
                     <StackPanel Margin="20,0,20,0">
+                        <StackPanel Orientation="Horizontal">
                         <TextBlock Text="Items per page" FontSize="20" Width="139" Height="40" Canvas.Left="450" Canvas.Top="20" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                            <Button Margin="0,0,20,0" x:Name="previousButton" Width="80" Height="34" Content="Previous" Click="previousButton_Click"/>
                             <ComboBox Margin="0,0,20,0" x:Name="pageRowComboBox" Width="70" Height="32" SelectionChanged="pageRowComboBox_SelectionChanged" >
                                 <ComboBoxItem Content="2"/>
                                 <ComboBoxItem Content="5"/>
                                 <ComboBoxItem Content="10"/>
                             </ComboBox>
+                        </StackPanel>
+
+                        <StackPanel Margin="0,20,0,20" Orientation="Horizontal" HorizontalAlignment="Center">
+                            <Button Margin="0,0,20,0" x:Name="previousButton" Width="80" Height="34" Content="Previous" Click="previousButton_Click"/>
+                            <ComboBox Margin="0,0,20,0" Name="pagingComboBox" Width="200" Height="35" Canvas.Left="555" Canvas.Top="79" SelectionChanged="pagingComboBox_SelectionChanged" HorizontalAlignment="Center" VerticalAlignment="Top">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock>
+<Run Text="{Binding Page}"/>/<Run Text="{Binding Total}"/>
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+
                             <Button x:Name="nextButton" Width="80" Height="34" Content="Next" Click="nextButton_Click"/>
                         </StackPanel>
 
-                        <ComboBox Name="pagingComboBox" Width="200" Height="35" Canvas.Left="555" Canvas.Top="79" SelectionChanged="pagingComboBox_SelectionChanged" HorizontalAlignment="Center" VerticalAlignment="Top">
-                            <ComboBox.ItemTemplate>
-                                <DataTemplate>
-                                    <TextBlock>
-            <Run Text="{Binding Page}"/>/<Run Text="{Binding Total}"/>
-                                    </TextBlock>
-                                </DataTemplate>
-                            </ComboBox.ItemTemplate>
-                        </ComboBox>
-
+                        
                         <ListView Name="ordersListView"
         Canvas.Left="450" Canvas.Top="128"
         SelectionChanged="ordersListView_SelectionChanged" HorizontalAlignment="Center" VerticalAlignment="Top">
@@ -91,7 +95,7 @@ ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                             </ListView.View>
                         </ListView>
 
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <StackPanel Margin="0,20,0,0" Orientation="Horizontal" HorizontalAlignment="Center">
                             <TextBlock Text="Date from" FontSize="20"/>
                             <DatePicker x:Name="pickerDateFrom" Height="30"  HorizontalAlignment="Left">
                                 <DatePicker.Style>
@@ -130,7 +134,7 @@ ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                         </StackPanel>
 
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <StackPanel Margin="0,20,0,0" Orientation="Horizontal" HorizontalAlignment="Center">
                             <Button Content="Filter" Width="100" Height="44" Click="Button_Filter_Click" Canvas.Left="579" Canvas.Top="493" HorizontalAlignment="Left" VerticalAlignment="Top"/>
                         </StackPanel>
 
@@ -218,7 +222,7 @@ ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                             </Grid>
                         </Border>
 
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <StackPanel Margin="0,20,0,0" Orientation="Horizontal" HorizontalAlignment="Center">
                             <Button Name="btnAddOrder" Content="New Order" Margin="0,0,20,0"
       FontSize="20"
       Width="150" Height="50"
