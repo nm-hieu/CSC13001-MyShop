@@ -25,7 +25,8 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         
-        <!--
+        <!-- TODO: Search box
+        
         <TextBox Grid.Column="0" 
                  x:Name="SearchTextBox"
                  VerticalAlignment="Center"
@@ -104,8 +105,8 @@
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <Button Content="Edit"
-                                        Padding="20, 10"
-                                        VerticalAlignment="Center"
+                                        Style="{StaticResource ActionButton}"
+                                        Width="60" Height="30"
                                         Command="{Binding Path=DataContext.EditUserCommand, ElementName=userViewGrid}"
                                         CommandParameter="{Binding ID}"/>
                             </DataTemplate>
