@@ -42,6 +42,13 @@
                     Grid.Row="2"
                     Width="200">
             <RadioButton
+                Content="DashBoard"
+                Height="50"
+                FontSize="14"
+                Style="{StaticResource MenuItem}"
+
+                Command="{Binding HomeViewCommand}"/>
+            <RadioButton
                 Content= "Products"
                 Height="50"
                 FontSize="14"

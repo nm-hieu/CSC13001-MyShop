@@ -15,6 +15,7 @@ namespace MyShop.MVVM.ViewModel
     internal class MainViewModel: Observable
     {
         private object _currentView;
+        public RelayCommand HomeViewCommand { get; set; }
         public RelayCommand ProductsViewCommand { get; set; }
         public RelayCommand UserViewCommand { get; set; }
         public RelayCommand AnalyticsViewCommand { get; set; }  
@@ -70,7 +71,7 @@ namespace MyShop.MVVM.ViewModel
         public MainViewModel() 
         {
             //ConnectToServer();
-
+            HomeVM = new HomeViewModel();
             ProductsVM = new ProductsViewModel();
             UserVM = new UserViewModel();
             AnalyticsVM = new AnalyticsViewModel();
@@ -101,8 +102,14 @@ namespace MyShop.MVVM.ViewModel
             }
 
             var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-            
-            
+            HomeViewCommand = new RelayCommand(o =>
+            {
+                CurrentView = HomeVM;
+                config.AppSettings.Settings["CurrentView"].Value = "HomeVM";
+                config.Save(ConfigurationSaveMode.Minimal);
+                ConfigurationManager.RefreshSection("appSettings");
+            });
+
             ProductsViewCommand = new RelayCommand(o =>
             {
                 CurrentView = ProductsVM;
