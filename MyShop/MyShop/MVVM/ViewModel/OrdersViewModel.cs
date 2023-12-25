@@ -8,6 +8,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace MyShop.MVVM.ViewModel
 {
@@ -287,6 +288,75 @@ namespace MyShop.MVVM.ViewModel
 
             orders.Clear();
             orders = orderTempList;
+        }
+
+        public void getOrderByMonth(int month)
+        {
+            products.Clear();
+            orders.Clear();
+
+            GetProduct();
+            var commandString = @$"
+                select *
+                from Orders
+                where month(Date) = {month}
+                order by ID";
+            var command = new SqlCommand(commandString, DB.Instance.Connection);
+            var reader = command.ExecuteReader();
+
+            while (reader.Read())
+            {
+                int orderID = reader.GetInt32(0);
+                DateTime date = reader.GetDateTime(1);
+
+                var order = new Orders()
+                {
+                    ID = orderID,
+                    Date = date
+                };
+                orders.Add(order);
+            }
+            reader.Close();
+
+            foreach (Orders order in orders)
+            {
+                order.Products = GetOrderItem(order.ID);
+                order.TotalPrice = GetTotalPrice(order.Products);
+            }
+        }
+        public void getOrderByDate(int month, int day)
+        {
+            products.Clear();
+            orders.Clear();
+
+            GetProduct();
+            var commandString = @$"
+                select *
+                from Orders
+                where month(Date) = {month} and day(Date) = {day}
+                order by ID";
+            var command = new SqlCommand(commandString, DB.Instance.Connection);
+            var reader = command.ExecuteReader();
+
+            while (reader.Read())
+            {
+                int orderID = reader.GetInt32(0);
+                DateTime date = reader.GetDateTime(1);
+
+                var order = new Orders()
+                {
+                    ID = orderID,
+                    Date = date
+                };
+                orders.Add(order);
+            }
+            reader.Close();
+
+            foreach (Orders order in orders)
+            {
+                order.Products = GetOrderItem(order.ID);
+                order.TotalPrice = GetTotalPrice(order.Products);
+            }
         }
     }
 }

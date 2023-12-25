@@ -24,6 +24,7 @@ namespace MyShop.MVVM.View
     public partial class StatisticView : UserControl
     {
         StatisticViewModel StatisticVM;
+        string currentChart = "year";
 
         public StatisticView()
         {
@@ -54,6 +55,7 @@ namespace MyShop.MVVM.View
             yearButton.Visibility = Visibility.Visible;
             yearButton.IsEnabled = true;
 
+            currentChart = "month";
         }
 
         private void yearButton_Click(object sender, RoutedEventArgs e)
@@ -64,6 +66,29 @@ namespace MyShop.MVVM.View
             yearButton.IsEnabled = false;
             monthButton.Visibility = Visibility.Visible;
             monthButton.IsEnabled = true;
+
+            currentChart = "year";
+        }
+
+        private void lvchart_DataClick(object sender, ChartPoint chartPoint)
+        {
+            int month= - 1;
+            int day = - 1;
+            if (String.Equals(currentChart, "month"))
+            {
+                month = (int)monthCombobox.SelectedValue;
+                string getDate = xBar.Labels[(int)chartPoint.X];
+                day = Int32.Parse(getDate);
+            }
+            else if (String.Equals(currentChart, "year"))
+            {
+                string getDate = xBar.Labels[(int)chartPoint.X];
+                string[] temp = getDate.Split(' ');
+                month = Int32.Parse(temp[1]);
+            }
+
+            var ChartDataWindow = new ChartData(month, day);
+            ChartDataWindow.Show();
         }
     }
 }
