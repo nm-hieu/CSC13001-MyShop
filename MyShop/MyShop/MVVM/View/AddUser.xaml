@@ -18,6 +18,7 @@
             <ColumnDefinition Width="3*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
             <RowDefinition Height="3*"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
@@ -44,35 +45,38 @@
             </Style>
         </Grid.Resources>
 
-        <ComboBox Grid.Column="1"
-                  Width="130" Height="120"
-                  HorizontalAlignment="Left"
-                  VerticalAlignment="Center"
-                  VerticalContentAlignment="Center"
-                  ItemsSource="{Binding AvatarList}"
-                  SelectedIndex="{Binding AvatarIndex}">    
+        <TextBlock Grid.Column="0" Grid.Row="0" Text="ID:"/>
+        <TextBlock Grid.Column="0" Grid.Row="1" Text="Avatar:"/>
+        <TextBlock Grid.Column="0" Grid.Row="2" Text="Username:"/>
+        <TextBlock Grid.Column="0" Grid.Row="3" Text="First name:"/>
+        <TextBlock Grid.Column="0" Grid.Row="4" Text="Last name:"/>
+        <TextBlock Grid.Column="0" Grid.Row="5" Text="Role:"/>
+        <TextBlock Grid.Column="0" Grid.Row="6" Text="Email:"/>
+        <TextBlock Grid.Column="0" Grid.Row="7" Text="Telephone:"/>
+        <TextBlock Grid.Column="0" Grid.Row="8" Text="Address:"/>
+
+        <TextBlock Grid.Column="1" Grid.Row="0" Text="{Binding ID}"
+                   HorizontalAlignment="Left"/>
+        <ComboBox Grid.Column="1" Grid.Row="1"
+          Width="130" Height="120"
+          HorizontalAlignment="Left"
+          VerticalAlignment="Center"
+          VerticalContentAlignment="Center"
+          ItemsSource="{Binding AvatarList}"
+          SelectedIndex="{Binding AvatarIndex}">
             <ComboBox.ItemTemplate>
                 <DataTemplate>
                     <Image Height="100" Width="100"
-                        RenderOptions.BitmapScalingMode="HighQuality" 
-                        Source="{Binding Converter={StaticResource absoluteConverter}}">
+                RenderOptions.BitmapScalingMode="HighQuality" 
+                Source="{Binding Converter={StaticResource absoluteConverter}}">
                     </Image>
                 </DataTemplate>
             </ComboBox.ItemTemplate>
         </ComboBox>
-        <TextBlock Grid.Column="0" Grid.Row="0" Text="Avatar:"/>
-        <TextBlock Grid.Column="0" Grid.Row="1" Text="Username:"/>
-        <TextBlock Grid.Column="0" Grid.Row="2" Text="First name:"/>
-        <TextBlock Grid.Column="0" Grid.Row="3" Text="Last name:"/>
-        <TextBlock Grid.Column="0" Grid.Row="4" Text="Role:"/>
-        <TextBlock Grid.Column="0" Grid.Row="5" Text="Email:"/>
-        <TextBlock Grid.Column="0" Grid.Row="6" Text="Telephone:"/>
-        <TextBlock Grid.Column="0" Grid.Row="7" Text="Address:"/>
-
-        <TextBox Grid.Column="1" Grid.Row="1" Text="{Binding Username}"/>
-        <TextBox Grid.Column="1" Grid.Row="2" Text="{Binding FirstName}"/>
-        <TextBox Grid.Column="1" Grid.Row="3" Text="{Binding LastName}"/>
-        <ComboBox Grid.Column="1" Grid.Row="4"
+        <TextBox Grid.Column="1" Grid.Row="2" Text="{Binding Username}"/>
+        <TextBox Grid.Column="1" Grid.Row="3" Text="{Binding FirstName}"/>
+        <TextBox Grid.Column="1" Grid.Row="4" Text="{Binding LastName}"/>
+        <ComboBox Grid.Column="1" Grid.Row="5"
                   Width="130" Height="30"
                   HorizontalAlignment="Left"
                   VerticalContentAlignment="Center"
@@ -84,14 +88,14 @@
                 </DataTemplate>
             </ComboBox.ItemTemplate>
         </ComboBox>
-        <TextBox Grid.Column="1" Grid.Row="5" Text="{Binding Email}"/>
-        <TextBox Grid.Column="1" Grid.Row="6" Text="{Binding Telephone}"/>
-        <TextBox Grid.Column="1" Grid.Row="7" Text="{Binding Address}"/>
-        <TextBlock Grid.Column="0" Grid.Row="8" Grid.ColumnSpan="2" 
+        <TextBox Grid.Column="1" Grid.Row="6" Text="{Binding Email}"/>
+        <TextBox Grid.Column="1" Grid.Row="7" Text="{Binding Telephone}"/>
+        <TextBox Grid.Column="1" Grid.Row="8" Text="{Binding Address}"/>
+        <TextBlock Grid.Column="0" Grid.Row="9" Grid.ColumnSpan="2" 
                    Margin="0" HorizontalAlignment="Center"
                    Foreground="{StaticResource textColor-error}"
                    Text="{Binding Message}"/>
-        <Button Grid.Column="0" Grid.Row="9" Grid.ColumnSpan="2"
+        <Button Grid.Column="0" Grid.Row="10" Grid.ColumnSpan="2"
                 Width="300" FontSize="15"
                 Margin="10" Padding="5"
                 Style="{StaticResource ActionButton}"

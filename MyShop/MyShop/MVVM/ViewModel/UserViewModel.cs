@@ -99,5 +99,7 @@ namespace MyShop.MVVM.ViewModel
             }
             return UserList[index];
         }
+
+        // TODO: Handle pagination
     }
 }

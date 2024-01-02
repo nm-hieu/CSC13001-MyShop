@@ -16,6 +16,7 @@ namespace MyShop.MVVM.ViewModel
 {
     class AddUserViewModel : ObservableObject
     {
+        public int ID { get; set; }
         public string Username { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
@@ -59,32 +60,16 @@ namespace MyShop.MVVM.ViewModel
             }
             AvatarList = _avatarList;
         }
-        /*
-        public void addUserData()
-        {
-            _user = new UserModel
-            {
-                Avatar = AvatarList[AvatarIndex],
-                Username = Username,
-                FirstName = FirstName,
-                LastName = LastName,
-                Role = RoleList[RoleIndex],
-                Email = Email,
-                Telephone = Telephone,
-                Address = Address,
-            };
-        }
-        */
-        
+
         public ICommand AddUserCommand { get; set; }
         private UserModel _user;
 
         
         public AddUserViewModel()
         {
+            ID = getLastID("User") + 1;
             loadRoleData();
             loadAvatarData();
-            //addUserData();
             AddUserCommand = new RelayCommand(ExecuteAddUserCommand);
         }
         private int getLastID(string tableName)
@@ -107,7 +92,6 @@ namespace MyShop.MVVM.ViewModel
             {
                 if (cfScreen.isConfirm == true)
                 {
-                    int ID = getLastID("User") + 1;
                     if (AddUserData(_user, ID) == true)
                     {
                         MessageBox.Show("Thêm User thành công!");
@@ -151,9 +135,12 @@ namespace MyShop.MVVM.ViewModel
             {
                 rowsAffected = command.ExecuteNonQuery();
             }
-            catch (SqlException)
+            catch (SqlException err)
             {
-                Message = "Username/Email/Telephone đã được sử dụng";
+                if (err.Number == 2601) // Cannot insert duplicate key row in object error
+                    Message = "Username/Email/Telephone đã được sử dụng";
+                else
+                    throw;
             }
 
             // < 0 is failed

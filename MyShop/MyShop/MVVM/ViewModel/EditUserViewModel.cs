@@ -14,11 +14,13 @@ using Microsoft.Data.SqlClient;
 using MyShop.Database;
 using System.ComponentModel;
 using System.Configuration;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.Engineering;
 
 namespace MyShop.MVVM.ViewModel
 {
     class EditUserViewModel : ObservableObject
     {
+        public int ID { get; set; }
         public string Username {  get; set; }
         public string FirstName {  get; set; }
         public string LastName {  get; set; }
@@ -69,6 +71,7 @@ namespace MyShop.MVVM.ViewModel
         }
         public void loadUserData(UserModel user)
         {
+            ID = user.ID;
             Username = user.Username;
             FirstName = user.FirstName;
             LastName = user.LastName;
@@ -155,9 +158,12 @@ namespace MyShop.MVVM.ViewModel
             {
                 rowsAffected = command.ExecuteNonQuery();
             }
-            catch (SqlException)
+            catch (SqlException err)
             {
-                Message = "Username/Email/Telephone đã được sử dụng";
+                if (err.Number == 2601) // Cannot insert duplicate key row in object error
+                    Message = "Username/Email/Telephone đã được sử dụng";
+                else
+                    throw;
             }
 
             // < 0 is failed
