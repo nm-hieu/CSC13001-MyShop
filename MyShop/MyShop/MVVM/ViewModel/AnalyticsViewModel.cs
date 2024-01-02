@@ -342,6 +342,10 @@ namespace MyShop.MVVM.ViewModel
         private void getTop5YearlyProductDetail()
         {
             var sql = sqlTrendingProductDetail(yearlyItemIds);
+            if (sql == "")
+            {
+                return;
+            }
             var command = new SqlCommand(sql, DB.Instance.Connection);
 
             var reader = command.ExecuteReader();
