@@ -15,7 +15,7 @@ Chương trình quản lý việc bán hàng với sản phẩm thiết bị đi
 | 20120515 | Luân Mã Khương |
 
 # 📽️ Link video demo
-[Project MyShop Demo]()
+[Project MyShop Demo](https://youtu.be/KBA-erkhek0)
 
 # ✅ Danh sách chức năng
 | Chức năng cơ sở | Mô tả |
@@ -41,5 +41,11 @@ Chương trình quản lý việc bán hàng với sản phẩm thiết bị đi
 => 3.5 điểm
 
 # 💯 Đánh giá thang điểm: 8.5 
+## Đánh giá điểm mỗi thành viên
+| MSSV | Họ tên | Đóng góp |
+| --- | --- | --- |
+| 20120095 | Ngô Quang Hưng | 100% |
+| 20120475 | Nguyễn Minh Hiếu | 100% |
+| 20120515 | Luân Mã Khương | 100%|
 
 Cảm ơn thầy đã xem!
