@@ -1,6 +1,3 @@
-# Trello (Xóa mô tả sau)
-https://trello.com/b/GJ1iNyuM/ltudwindow-project1
-
 # 📄 Thông tin project
 ## Mô tả project
 Project MyShop - Môn Lập trình Window - CSC13001<br>
@@ -13,9 +10,9 @@ Chương trình quản lý việc bán hàng với sản phẩm thiết bị đi
 # ✍️ Thông tin nhóm
 | MSSV | Họ tên |
 | --- | --- |
+| 20120095 | Ngô Quang Hưng |
 | 20120475 | Nguyễn Minh Hiếu |
-|  | Ngô Quang Hưng |
-|  | Luân Mã Khương |
+| 20120515 | Luân Mã Khương |
 
 # 📽️ Link video demo
 [Project MyShop Demo]()
@@ -24,11 +21,11 @@ Chương trình quản lý việc bán hàng với sản phẩm thiết bị đi
 | Chức năng cơ sở | Mô tả |
 | --- | --- |
 | Sử dụng CSDL | SQL Server |
-| Màn hình đăng nhập | Chọn server, database. <br> Đăng nhập bằng user, password |
-| Màn hình Dashboard <br> (Chưa hoàn thiện) | Có tổng cộng bao nhiêu sản phẩm đang bán <br> Có tổng cộng bao nhiêu đơn hàng mới trong tuần / tháng <br> Liệt kê top 5 sản phẩm đang sắp hết hàng (số lượng < 5) |
-| Màn hình Quản lý hàng hóa (Product) | Import từ Excel <br> Xem, Thêm, Xóa, Sửa <br> Tìm kiếm, Lọc |
-| Màn hình Quản lý đơn hàng (Order) | Xem, Thêm, Xóa, Tìm kiếm |
-| Màn hình Báo cáo thống kê (Statistic) <br> (Hoàn thiện 1/2 ???) | Báo cáo doanh thu và lợi nhuận theo ngày đến ngày, theo tuần, theo tháng, theo năm (vẽ biểu đồ) <br> Xem các sản phẩm và số lượng bán theo ngày đến ngày, theo tuần, theo tháng, theo năm (vẽ biểu đồ) |
+| Màn hình đăng nhập | Cho chọn server, database. <br> Lưu username & password ở local <br> Password mã hóa <br> User: admin - Password: 123456 |
+| Màn hình Dashboard | Có tổng cộng bao nhiêu sản phẩm đang bán <br> Có tổng cộng bao nhiêu đơn hàng mới trong tuần / tháng |
+| Màn hình Quản lý hàng hóa (Product) | Import từ Excel <br> Thao tác: Xem, Thêm, Xóa, Sửa <br> Phân loại, Xem chi tiết <br> Tìm kiếm theo tên <br> Lọc theo giá |
+| Màn hình Quản lý đơn hàng (Order) | Tạo đơn hàng <br> Xóa, Sửa đơn hàng <br> Xem phân trang, Chi tiết |
+| Màn hình Báo cáo thống kê (Statistic) | Báo cáo doanh thu và lợi nhuận <br> Xem các sản phẩm và số lượng bán |
 | Cấu hình | Chỉnh số lượng sản phẩm mỗi trang <br> Mở lại view cuối mà lần trước sử dụng khi tắt |
 | Đóng gói thành file cài đặt | Xuất file .exe |
 => 5 điểm
@@ -44,3 +41,5 @@ Chương trình quản lý việc bán hàng với sản phẩm thiết bị đi
 => 3.5 điểm
 
 # 💯 Đánh giá thang điểm: 8.5 
+
+Cảm ơn thầy đã xem!
