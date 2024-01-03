@@ -17,6 +17,7 @@ namespace MyShop.MVVM.ViewModel
         public List<string> Labels {  get; set; }
         public Func<double, string> Formatter {  get; set; }
         public BindingList<int> MonthList = new BindingList<int>();
+        public BindingList<int> YearList = new BindingList<int>();
         public string AxisXTitle {  get; set; }
 
         public event PropertyChangedEventHandler? PropertyChanged;
@@ -27,13 +28,13 @@ namespace MyShop.MVVM.ViewModel
             SeriesCollection = new SeriesCollection();
             Labels = new List<string>();
 
-            getYearStatistic();
-            getMonthList();
+            getYearList();
             Formatter = value => value.ToString("N");
         }
 
-        public void getYearStatistic()
+        public void getYearStatistic(int year)
         {
+            getMonthList(year);
             SeriesCollection.Clear();
             Labels.Clear();
             AxisXTitle = "Tháng";
@@ -42,20 +43,25 @@ namespace MyShop.MVVM.ViewModel
                     select MONTH(Date), sum(p.Price)
                     from Orders o left join OrderDetails od on o.ID = od.OrderID
 			                      left join Products p on p.ID = od.ProductID
+                    where YEAR(Date) = {year}
                     group by MONTH(Date)";
             var command = new SqlCommand(commandString, DB.Instance.Connection);
             var reader = command.ExecuteReader();
 
             SeriesCollection.Add(new ColumnSeries
             {
-                Title = "2023",
+                Title = year.ToString(),
                 Values = new ChartValues<int>()
             }) ;
 
             while (reader.Read())
             {
-                int month = reader.GetInt32(0);
-                int revenue = reader.GetInt32(1);
+                int month = 0, revenue = 0;
+                if (!reader.IsDBNull(0))
+                {
+                    month = reader.GetInt32(0);
+                    revenue = reader.GetInt32(1);
+                }
 
                 Labels.Add($"Tháng {month}");
                 SeriesCollection[0].Values.Add(revenue);
@@ -63,7 +69,7 @@ namespace MyShop.MVVM.ViewModel
             reader.Close();
         }
 
-        public void getMonthStatistic(int month)
+        public void getMonthStatistic(int month, int year)
         {
             SeriesCollection.Clear();
             Labels.Clear();
@@ -80,7 +86,7 @@ namespace MyShop.MVVM.ViewModel
                     select DAY(o.Date), sum(p.Price)
                     from Orders o left join OrderDetails od on o.ID = od.OrderID
 			                      left join Products p on p.ID = od.ProductID
-                    where MONTH(o.Date) = {month}
+                    where MONTH(o.Date) = {month} and YEAR(o.Date) = {year}
                     group by DAY(o.Date)";
             var command = new SqlCommand(commandString, DB.Instance.Connection);
             var reader = command.ExecuteReader();
@@ -134,14 +140,15 @@ namespace MyShop.MVVM.ViewModel
             }
         }
 
-        void getMonthList()
+        void getMonthList(int year)
         {
             MonthList.Clear();
 
             var commandString = @$"
                     select distinct MONTH(o.Date) as Month
                     from Orders o left join OrderDetails od on o.ID = od.OrderID
-			                      left join Products p on p.ID = od.ProductID";
+			                      left join Products p on p.ID = od.ProductID
+                    where YEAR(Date) = {year}";
             var command = new SqlCommand(commandString, DB.Instance.Connection);
             var reader = command.ExecuteReader();
             
@@ -150,6 +157,26 @@ namespace MyShop.MVVM.ViewModel
                 int month = reader.GetInt32(0);
 
                 MonthList.Add(month);
+            }
+            reader.Close();
+        }
+
+        void getYearList()
+        {
+            YearList.Clear();
+
+            var commandString = @$"
+                    select distinct YEAR(o.Date) as Year
+                    from Orders o left join OrderDetails od on o.ID = od.OrderID
+			                      left join Products p on p.ID = od.ProductID";
+            var command = new SqlCommand(commandString, DB.Instance.Connection);
+            var reader = command.ExecuteReader();
+
+            while (reader.Read())
+            {
+                int year = reader.GetInt32(0);
+
+                YearList.Add(year);
             }
             reader.Close();
         }

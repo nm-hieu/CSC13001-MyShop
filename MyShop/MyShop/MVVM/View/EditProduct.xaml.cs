@@ -58,7 +58,7 @@ namespace MyShop.MVVM.View
                     editProductVM.product.Name = nametb.Text;
                     editProductVM.product.Color = colortb.Text;
                     editProductVM.product.Price = int.Parse(pricetb.Text.ToString());
-                    editProductVM.product.AvailableQuantity = int.Parse(pricetb.Text.ToString());
+                    editProductVM.product.AvailableQuantity = int.Parse(quantitytb.Text.ToString());
                     editProductVM.product.MarkUpPercent = double.Parse(makeupPercent.Text.ToString());
                     editProductVM.product.Category = categorycb.SelectedIndex + 1;
                     DialogResult = true;

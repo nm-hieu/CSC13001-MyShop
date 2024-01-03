@@ -174,7 +174,7 @@ namespace MyShop.MVVM.ViewModel
                 }
                 else
                 {
-                    return " AND WHERE Category = @Category ";
+                    return " AND Category = @Category ";
                 }
             }
             return "";

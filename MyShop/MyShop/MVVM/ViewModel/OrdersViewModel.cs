@@ -185,7 +185,10 @@ namespace MyShop.MVVM.ViewModel
 
                 while (reader.Read())
                 {
-                    ordinalNumb = reader.GetInt32(0) + 1;
+                    if (reader.IsDBNull(0))
+                        ordinalNumb = 1;
+                    else
+                        ordinalNumb = reader.GetInt32(0) + 1;
                 }
                 reader.Close();
 

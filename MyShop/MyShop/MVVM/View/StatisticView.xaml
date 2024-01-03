@@ -17,11 +17,14 @@
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="0.5*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <Button Content="Month" Width="80" Height="40" Name="monthButton" Click="monthButton_Click"/>
-            <Button Content="Year" Width="80" Height="40" Name="yearButton" Click="yearButton_Click" Visibility="Hidden"/>
-            <ComboBox Grid.Column="1" Width="80" Height="30" IsEnabled="False" Name="monthCombobox" SelectionChanged="monthCombobox_SelectionChanged"/>
+            
+            <Button Content="Year" Width="80" Height="40" Name="yearButton" Click="yearButton_Click" HorizontalAlignment="Center"/>
+            <ComboBox Grid.Column="1" Width="80" Height="30" Name="yearCombobox" SelectionChanged="yearCombobox_SelectionChanged"/>
+            <Button Content="Month" Width="80" Height="40" Name="monthButton" Click="monthButton_Click" Visibility="Hidden" HorizontalAlignment="Right"/>
+            <ComboBox Grid.Column="2" Width="80" Height="30" Name="monthCombobox" SelectionChanged="monthCombobox_SelectionChanged" IsEnabled="False" HorizontalAlignment="Left"/>
 
         </Grid>
         
